@@ -1,0 +1,33 @@
+{
+    "name": "normal",
+    "display_name": "Normal",
+    "category": "Operations",
+    "kernel": "NormalKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 255, 128, 255 ],
+    "input_pins": [
+        {
+            "name": "Input",
+            "display_name": "Input",
+            "type": "R"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "Output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+        {
+            "name": "bump",
+            "display_name": "Bump",
+            "type": "Float",
+            "default_value": 15.0,
+            "min_value": 1.00,
+            "max_value": 1024.0,
+            "step_value" : 0.5
+        }
+    ]
+}

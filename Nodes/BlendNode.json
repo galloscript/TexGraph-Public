@@ -1,0 +1,34 @@
+{
+    "name": "Blend",
+    "display_name": "Blend",
+    "category": "Operations",
+    "kernel": "BlendKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+        {
+            "name": "inputA",
+            "display_name": "InputA",
+            "type": "RGB"
+        },
+        {
+            "name": "inputB",
+            "display_name": "InputB",
+            "type": "RGB"
+        },
+        {
+            "name": "mask",
+            "display_name": "Mask",
+            "type": "R"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+    ]
+}

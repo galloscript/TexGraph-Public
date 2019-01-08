@@ -1,0 +1,9 @@
+{
+    "name": "GreyKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Grey.comp.glsl"
+        ]
+    }
+}

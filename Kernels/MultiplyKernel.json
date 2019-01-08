@@ -1,0 +1,9 @@
+{
+    "name": "MultiplyKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Multiply.comp.glsl"
+        ]
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "name": "Polygon2D",
+    "display_name": "Polygon 2D",
+    "category": "Generators",
+    "kernel": "Polygon2DKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 100, 100, 100 ],
+    "input_pins": [],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R"
+        }
+    ],
+    "properties": [
+        {
+            "name": "sides",
+            "display_name": "Sides",
+            "type": "Integer",
+            "default_value": 3,
+            "min_value": 3,
+            "max_value": 12
+        },
+        {
+            "name": "falloff",
+            "display_name": "Falloff",
+            "type": "float",
+            "default_value": 0.5,
+            "min_value": 0.0,
+            "max_value": 1.0
+        },
+        {
+            "name": "zoom",
+            "display_name": "Zoom",
+            "type": "float",
+            "default_value": 2.0,
+            "min_value": 1.0,
+            "max_value": 8.0
+        }
+    ]
+}

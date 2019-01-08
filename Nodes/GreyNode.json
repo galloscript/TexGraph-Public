@@ -1,0 +1,26 @@
+{
+    "name": "Grey",
+    "display_name": "Grey",
+    "category": "Basic",
+    "kernel": "GreyKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 0, 100, 50 ],
+    "input_pins": [],
+    "output_pins": [
+        {
+            "name": "Output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+        {
+            "name": "value",
+            "display_name": "Value",
+            "type": "float",
+            "default_value": 0.5,
+            "min_value": 0,
+            "max_value": 1
+        }
+    ]
+}

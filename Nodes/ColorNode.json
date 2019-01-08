@@ -1,0 +1,40 @@
+{
+    "name": "Color",
+    "display_name": "Color",
+    "category": "Basic",
+    "kernel": "ColorKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 0, 100, 50 ],
+    "input_pins": [
+        {
+            "name": "red",
+            "display_name": "Red",
+            "type": "R"
+        },
+        {
+            "name": "green",
+            "display_name": "Green",
+            "type": "R"
+        },
+        {
+            "name": "blue",
+            "display_name": "Blue",
+            "type": "R"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "Output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+        {
+            "name": "color",
+            "display_name": "Color",
+            "type": "Color",
+            "default_value": [ 255, 255, 255 ]
+        }
+    ]
+}

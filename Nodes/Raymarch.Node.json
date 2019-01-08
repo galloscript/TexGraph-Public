@@ -1,0 +1,20 @@
+{
+    "name": "Raymarch",
+    "display_name": "Raymarch",
+    "category": "Experiments",
+    "kernel": "RaymarchPreview",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+    ]
+}

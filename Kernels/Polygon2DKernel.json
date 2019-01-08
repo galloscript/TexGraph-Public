@@ -1,0 +1,9 @@
+{
+    "name": "Polygon2DKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Polygon2D.comp.glsl"
+        ]
+    }
+}

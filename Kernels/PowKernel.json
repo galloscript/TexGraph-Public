@@ -1,0 +1,9 @@
+{
+    "name": "PowKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Pow.comp.glsl"
+        ]
+    }
+}

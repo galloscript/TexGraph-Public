@@ -1,0 +1,37 @@
+{
+    "name": "Multiply",
+    "display_name": "Multiply",
+    "category": "Operations",
+    "kernel": "MultiplyKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+        {
+            "name": "inputA",
+            "display_name": "InputA",
+            "type": "RGB"
+        },
+        {
+            "name": "inputB",
+            "display_name": "InputB",
+            "type": "RGB"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+        {
+            "name": "multiplier",
+            "display_name": "Multiplier",
+            "type": "Float",
+            "default_value": 1.0,
+            "min_value": 0.0,
+            "max_value": 1.0
+        }
+    ]
+}

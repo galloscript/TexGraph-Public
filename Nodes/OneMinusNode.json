@@ -1,0 +1,24 @@
+{
+    "name": "OneMinus",
+    "display_name": "OneMinus",
+    "category": "Operations",
+    "kernel": "OneMinusKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+        {
+            "name": "input",
+            "display_name": "Input",
+            "type": "RGB"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+    ]
+}

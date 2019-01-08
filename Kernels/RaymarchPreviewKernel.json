@@ -1,0 +1,9 @@
+{
+    "name": "RaymarchPreview",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/RaymarchPreview.comp.glsl"
+        ]
+    }
+}

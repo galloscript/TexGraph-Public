@@ -1,0 +1,38 @@
+{
+    "name": "mix",
+    "display_name": "Mix",
+    "category": "Operations",
+    "kernel": "MixKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 100, 100, 0 ],
+    "input_pins": [
+        {
+            "name": "input",
+            "display_name": "Input",
+            "type": "R",
+            "uniform": "uInput"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "RGB",
+            "uniform": "uOutput"
+        }
+    ],
+    "properties": [
+        {
+            "name": "begin",
+            "display_name": "Begin Color",
+            "type": "Color",
+            "default_value": [ 0, 150, 0 ]
+        },
+        {
+            "name": "end",
+            "display_name": "End Color",
+            "type": "Color",
+            "default_value": [ 0, 0, 200 ]
+        }
+    ]
+}

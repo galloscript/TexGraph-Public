@@ -1,0 +1,78 @@
+{
+    "name": "IQNoise",
+    "display_name": "IQNoise",
+    "category": "Generators",
+    "kernel": "IQNoiseKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 0, 100, 0 ],
+    "input_pins": [
+        {
+            "name": "offset",
+            "display_name": "Offset",
+            "type": "R",
+            "uniform": "uOffset"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R",
+            "uniform": "uOutput"
+        }
+    ],
+    "properties": [
+        {
+            "name": "voronoi",
+            "display_name": "Voronoi",
+            "type": "float",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 1
+        },
+        {
+            "name": "blur",
+            "display_name": "Blur",
+            "type": "float",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 1
+        },
+        {
+            "name": "panx",
+            "display_name": "PanX",
+            "type": "float",
+            "default_value": 1,
+            "min_value": 1,
+            "max_value": 200,
+            "step_value": 2.0
+        },
+        {
+            "name": "pany",
+            "display_name": "PanY",
+            "type": "float",
+            "default_value": 1,
+            "min_value": 1,
+            "max_value": 200,
+            "step_value": 2.0
+        },
+        {
+            "name": "scalex",
+            "display_name": "ScaleX",
+            "type": "float",
+            "default_value": 10,
+            "min_value": 1.0,
+            "max_value": 200,
+            "step_value": 1.0
+        },
+        {
+            "name": "scaley",
+            "display_name": "ScaleY",
+            "type": "float",
+            "default_value": 10,
+            "min_value": 1.0,
+            "max_value": 200,
+            "step_value": 1.0
+        }
+    ]
+}

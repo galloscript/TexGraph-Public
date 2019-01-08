@@ -1,0 +1,40 @@
+{
+    "name": "Clamp",
+    "display_name": "Clamp",
+    "category": "Operations",
+    "kernel": "ClampKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 0, 100, 50 ],
+    "input_pins": [
+        {
+            "name": "Input",
+            "display_name": "Input",
+            "type": "RGB"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "Output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+        {
+            "name": "min",
+            "display_name": "Min Value",
+            "type": "float",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 1
+        },
+        {
+            "name": "max",
+            "display_name": "Max Value",
+            "type": "float",
+            "default_value": 1,
+            "min_value": 0,
+            "max_value": 1
+        }
+    ]
+}

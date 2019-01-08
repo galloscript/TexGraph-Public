@@ -1,0 +1,32 @@
+{
+    "name": "Pow",
+    "display_name": "Pow",
+    "category": "Operations",
+    "kernel": "PowKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+        {
+            "name": "input",
+            "display_name": "Input",
+            "type": "RGB"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "RGB"
+        }
+    ],
+    "properties": [
+        {
+            "name": "power",
+            "display_name": "Power",
+            "type": "Float",
+            "default_value": 1.0,
+            "min_value": 1.0,
+            "max_value": 32.0
+        }
+    ]
+}

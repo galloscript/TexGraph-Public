@@ -1,0 +1,19 @@
+{
+    "name": "GradientNoise",
+    "display_name": "GrNoise",
+    "category": "Generators",
+    "kernel": "GradientNoiseKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 100, 100, 100 ],
+    "input_pins": [],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R"
+        }
+    ],
+    "properties": [
+
+    ]
+}

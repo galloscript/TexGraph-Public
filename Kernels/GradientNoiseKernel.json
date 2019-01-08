@@ -1,0 +1,9 @@
+{
+    "name": "GradientNoiseKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/GradientNoise.comp.glsl"
+        ]
+    }
+}

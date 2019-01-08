@@ -1,0 +1,9 @@
+{
+    "name": "IQNoiseKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/IQNoise.comp.glsl"
+        ]
+    }
+}
