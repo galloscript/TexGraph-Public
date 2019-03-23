@@ -1,8 +1,8 @@
 {
-    "name": "blur",
-    "display_name": "Blur",
+    "name": "Tiling",
+    "display_name": "Tiling",
     "category": "Operations",
-    "kernel": "BlurKernel",
+    "kernel": "TilingKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 0, 100, 50 ],
     "input_pins": [
@@ -21,13 +21,12 @@
     ],
     "properties": [
         {
-            "name": "area",
-            "display_name": "Area",
-            "type": "float",
-            "default_value": 2.0,
-            "min_value": 0.0,
-            "max_value": 8.0,
-            "step_value": 0.01
+            "name": "repeat",
+            "display_name": "Repeat",
+            "type": "Integer",
+            "default_value": 1,
+            "min_value": 1,
+            "max_value": 32
         }
     ]
 }

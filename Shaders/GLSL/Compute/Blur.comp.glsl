@@ -9,6 +9,9 @@ precision highp float;
 
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
+layout(location = 100) uniform ivec3 uOutputBufferSize;
+layout(location = 101) uniform ivec3 uInvocationOffset;
+
 layout(binding = 0, rgba8) uniform image2D uOutputBuffer0;
 layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
 
@@ -53,8 +56,8 @@ const float sKernelTableD[9][9] =  float[][](float[](0.010989,	0.011474,	0.01183
 
 void main(void)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));
+    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
+    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     //vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
 
     const int lKernelSize = 9;
@@ -66,21 +69,23 @@ void main(void)
 
     ivec2 lInputCoord = ivec2(0, 0);
 
+    const ivec2 lAdjacentCoord = max(ivec2(1, 1), ivec2(uOutputBufferSize.x / 256.f, uOutputBufferSize.y / 256.f));
+
     for (int itx = lKernelStart; itx < lKernelEnd; itx++) 
     { 
         for (int ity = lKernelStart; ity < lKernelEnd; ity++) 
         { 
             /*lInputCoord.x = (lBufferCoord.x + int(itx * uArea)) % int(gl_GlobalInvocationID.x);
             lInputCoord.y = (lBufferCoord.y + int(ity * uArea)) % int(gl_GlobalInvocationID.y);
-            lInputCoord.x = (lInputCoord.x < 0) ? int(gl_NumWorkGroups.x) - lInputCoord.x :  lInputCoord.x;
-            lInputCoord.y = (lInputCoord.x < 0) ? int(gl_NumWorkGroups.y) - lInputCoord.y :  lInputCoord.y;*/
+            lInputCoord.x = (lInputCoord.x < 0) ? int(uOutputBufferSize.x) - lInputCoord.x :  lInputCoord.x;
+            lInputCoord.y = (lInputCoord.x < 0) ? int(uOutputBufferSize.y) - lInputCoord.y :  lInputCoord.y;*/
 
-            lInputCoord.x = lBufferCoord.x + int(itx * uArea);
-            lInputCoord.y = lBufferCoord.y + int(ity * uArea);
-            lInputCoord.x = (lInputCoord.x < 0) ? int(gl_NumWorkGroups.x) + lInputCoord.x :  lInputCoord.x;
-            lInputCoord.y = (lInputCoord.y < 0) ? int(gl_NumWorkGroups.y) + lInputCoord.y :  lInputCoord.y;
-            lInputCoord.x = lInputCoord.x % int(gl_NumWorkGroups.x);
-            lInputCoord.y = lInputCoord.y % int(gl_NumWorkGroups.y);
+            lInputCoord.x = lBufferCoord.x + int(itx * lAdjacentCoord.x * uArea);
+            lInputCoord.y = lBufferCoord.y + int(ity * lAdjacentCoord.y * uArea);
+            lInputCoord.x = (lInputCoord.x < 0) ? int(uOutputBufferSize.x) + lInputCoord.x :  lInputCoord.x;
+            lInputCoord.y = (lInputCoord.y < 0) ? int(uOutputBufferSize.y) + lInputCoord.y :  lInputCoord.y;
+            lInputCoord.x = lInputCoord.x % int(uOutputBufferSize.x);
+            lInputCoord.y = lInputCoord.y % int(uOutputBufferSize.y);
 
             vec4 lInputColor = imageLoad(uInputBuffer0, lInputCoord);
             lColorSum += lInputColor * sKernelTable[itx + lHalfSize][ity + lHalfSize];

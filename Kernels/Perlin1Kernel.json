@@ -1,0 +1,10 @@
+{
+    "name": "Perlin1Kernel",
+    "chop_extent": 64,
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Perlin1.comp.glsl"
+        ]
+    }
+}

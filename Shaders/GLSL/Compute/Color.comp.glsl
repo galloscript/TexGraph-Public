@@ -14,12 +14,15 @@ layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
 layout(binding = 2, rgba8) uniform image2D uInputBuffer1;
 layout(binding = 3, rgba8) uniform image2D uInputBuffer2;
 
+layout(location = 100) uniform ivec3 uOutputBufferSize;
+layout(location = 101) uniform ivec3 uInvocationOffset;
+
 layout(location = 0)  uniform vec4    uColor;
 
 void main(void)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));
+    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
+    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
     vec4 lInputColor1 = imageLoad(uInputBuffer1, lBufferCoord);
     vec4 lInputColor2 = imageLoad(uInputBuffer2, lBufferCoord);

@@ -12,6 +12,9 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(binding = 0, rgba8) uniform image2D uOutputBuffer0;
 layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
 
+layout(location = 100) uniform ivec3 uOutputBufferSize;
+layout(location = 101) uniform ivec3 uInvocationOffset;
+
 layout(location = 0)  uniform float uBumpHeightScale;
 
 
@@ -55,13 +58,13 @@ vec4 SampleWarped(layout(rgba8) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexS
 
 void main(void)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    ivec2 lTexSize = ivec2(gl_NumWorkGroups.xy);
-    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));
+    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
+    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
+    ivec2 lTexSize = ivec2(uOutputBufferSize.xy);
     vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
 
     const vec2 size = vec2(2.0,0.0);
-    const ivec2 lAdjacentCoord = max(ivec2(1, 1), ivec2(gl_NumWorkGroups.x / 256.f, gl_NumWorkGroups.y / 256.f));
+    const ivec2 lAdjacentCoord = max(ivec2(1, 1), ivec2(uOutputBufferSize.x / 256.f, uOutputBufferSize.y / 256.f));
 
     ivec2 lCoordList[5] = ivec2[5]
     (
@@ -72,11 +75,11 @@ void main(void)
         ivec2(lBufferCoord.x,     WrapTo(lBufferCoord.y + lAdjacentCoord.y, lTexSize.y))
     );
 
-    float s11 = (1.0f - lInputColor0.r) * uBumpHeightScale;
-    float s01 = (1.0f - imageLoad(uInputBuffer0, lCoordList[1]).r) * uBumpHeightScale;
-    float s21 = (1.0f - imageLoad(uInputBuffer0, lCoordList[2]).r) * uBumpHeightScale;
-    float s10 = (1.0f - imageLoad(uInputBuffer0, lCoordList[3]).r) * uBumpHeightScale;
-    float s12 = (1.0f - imageLoad(uInputBuffer0, lCoordList[4]).r) * uBumpHeightScale;
+    float s11 = (1.0 - lInputColor0.r) * uBumpHeightScale;
+    float s01 = (1.0 - imageLoad(uInputBuffer0, lCoordList[1]).r) * uBumpHeightScale;
+    float s21 = (1.0 - imageLoad(uInputBuffer0, lCoordList[2]).r) * uBumpHeightScale;
+    float s10 = (1.0 - imageLoad(uInputBuffer0, lCoordList[3]).r) * uBumpHeightScale;
+    float s12 = (1.0 - imageLoad(uInputBuffer0, lCoordList[4]).r) * uBumpHeightScale;
     
     vec3 va = normalize(vec3(size.xy,s21-s01));
     vec3 vb = normalize(vec3(size.yx,s12-s10));
@@ -90,7 +93,7 @@ void main(void)
 void main(void)
 {
     const ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));
+    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
 
 

@@ -1,20 +1,19 @@
 {
-    "name": "Raymarch",
-    "display_name": "Raymarch",
+    "name": "NoiseTest",
+    "display_name": "Noise Test",
     "category": "~Experiments",
-    "kernel": "RaymarchPreview",
+    "kernel": "NoiseTestKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
-    "color": [ 200, 0, 0 ],
-    "input_pins": [
-
-    ],
+    "color": [ 100, 100, 100 ],
+    "input_pins": [],
     "output_pins": [
         {
             "name": "output",
             "display_name": "Output",
-            "type": "RGB"
+            "type": "R"
         }
     ],
     "properties": [
+
     ]
 }

@@ -11,6 +11,9 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(binding = 0, rgba8) uniform image2D uOutputBuffer0;
 layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
 
+layout(location = 100) uniform ivec3 uOutputBufferSize;
+layout(location = 101) uniform ivec3 uInvocationOffset;
+
 layout(location = 0) uniform float uVoronoi;
 layout(location = 1) uniform float uBlur;
 layout(location = 2) uniform float uPanX;
@@ -66,8 +69,8 @@ F1 iqnoise(F2 x, F1 u, F1 v)
 
 void main(void)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));
+    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
+    vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     vec4 lInputColor = imageLoad(uInputBuffer0, lBufferCoord);
     float lPattern = iqnoise(F2((lUV.x + (uPanX * (0.5 / uScaleX)) + lInputColor.r) * uScaleX, 
                                 (lUV.y + (uPanY * (0.5 / uScaleY)) + lInputColor.g) * uScaleY), uVoronoi, uBlur);

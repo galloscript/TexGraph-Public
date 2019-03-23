@@ -1,7 +1,7 @@
 {
     "name": "GradientNoise",
     "display_name": "GrNoise",
-    "category": "Generators",
+    "category": "~Experiments",
     "kernel": "GradientNoiseKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 100, 100, 100 ],

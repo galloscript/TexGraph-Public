@@ -16,6 +16,9 @@ layout(binding = 2, rgba8) uniform image2D uInputBuffer1;
 layout(binding = 3, rgba8) uniform image2D uMaskBuffer;
 */
 
+layout(location = 100) uniform ivec3 uOutputBufferSize;
+layout(location = 101) uniform ivec3 uInvocationOffset;
+
 #define PI 3.142
 #define MARCHING_STEPS   256
 #define CAM_DEPTH 1.
@@ -190,7 +193,7 @@ vec4 trace(vec3 ro, vec3 rd)//, out vec3 normal, out float ao, out float depth)
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    vec2 iResolution = vec2(gl_NumWorkGroups.xy);
+    vec2 iResolution = vec2(uOutputBufferSize.xy);
     vec2 q = (fragCoord.xy - .5 * iResolution.xy ) / iResolution.y;
     vec3 ro = vec3(0, 0, 2.0);
     vec3 rd = normalize(vec3(q, 0.3) - ro);
@@ -205,8 +208,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 void main(void)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));
+    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
+    vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     //vec4 lInputColor0 = imageLoad(uInputBuffer0,    ivec2(lUV * vec2(imageSize(uInputBuffer0))));
     //vec4 lInputColor1 = imageLoad(uInputBuffer1,    ivec2(lUV * vec2(imageSize(uInputBuffer1))));
     //vec4 lInputColor2 = imageLoad(uMaskBuffer,      ivec2(lUV * vec2(imageSize(uInputBuffer2))));

@@ -34,6 +34,9 @@ in vec3 ex_Normal;
 in vec3 ex_Tangent;
 in vec3 ex_Binormal;
 in vec4 ex_EyeSpacePosition;
+in vec3 ex_FragPosition;
+in vec3 ex_TangentViewPosition;
+in vec3 ex_TangentFragPosition;
 in mat4 ex_ModelViewMatrix;
 
 layout(location = 12) uniform mat4 uBGRotMatrix;
@@ -62,6 +65,11 @@ layout(location = 0) out vec4 out_Color;
 layout(location = 2) out vec4 out_Normal;
 layout(location = 3) out vec4 out_Position;
 layout(location = 4) out vec4 out_PBRInfo;*/
+
+vec3 InvertY(in vec3 aVec3)
+{
+    return vec3(aVec3.x, 1.0 - aVec3.y, aVec3.z);
+}
 
 vec3 TangentToWorldNormal(in vec3 aTangentSpaceNormal)
 {
@@ -106,17 +114,77 @@ vec4 CubeMapExposure(samplerCube _cubeMap, vec3 _n, float _lod, float _exposure)
 {
     return textureLod(_cubeMap, mat3(uBGRotMatrix) * _n, _lod) * pow(2.0, _exposure);
 }
+/*
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+{ 
+    float height =  texture(uHeightMap, texCoords).r;    
+    vec2 p = viewDir.xy / viewDir.z * (height * 0.1);
+    return texCoords - p;    
+} 
+*/
 
+float GetHeight(vec2 texCoords)
+{
+    return 1.0 - texture(uHeightMap, texCoords).r;
+}
+
+//Parallax Occlusion Mapping from: https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+{ 
+    const float height_scale = 0.05;
+    // number of depth layers
+    const float minLayers = 8.0;
+    const float maxLayers = 32.0;
+    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));  
+    // calculate the size of each layer
+    float layerDepth = 1.0 / numLayers;
+    // depth of current layer
+    float currentLayerDepth = 0.0;
+    // the amount to shift the texture coordinates per layer (from vector P)
+    vec2 P = viewDir.xy * height_scale; 
+    vec2 deltaTexCoords = P / numLayers; 
+
+    // get initial values
+    vec2  currentTexCoords     = texCoords;
+    float currentDepthMapValue = GetHeight(currentTexCoords);
+  
+    while(currentLayerDepth < currentDepthMapValue)
+    {
+        // shift texture coordinates along direction of P
+        currentTexCoords -= deltaTexCoords;
+        // get depthmap value at current texture coordinates
+        currentDepthMapValue = GetHeight(currentTexCoords);  
+        // get depth of next layer
+        currentLayerDepth += layerDepth;  
+    }
+
+    // get texture coordinates before collision (reverse operations)
+    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+
+    // get depth after and before collision for linear interpolation
+    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = GetHeight(prevTexCoords) - currentLayerDepth + layerDepth;
+ 
+    // interpolation of texture coordinates
+    float weight = afterDepth / (afterDepth - beforeDepth);
+    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+    return finalTexCoords;  
+} 
 vec3 PBRColor()
 {
-    vec3 lAlbedo = texture(uAlbedoMap, ex_TexCoord.xy).xyz;
-    float lRoughness = texture(uRoughnessMap, ex_TexCoord.xy).x;
-    float lMetallic = texture(uMetalnessMap, ex_TexCoord.xy).x;
-    vec3 lNormal =  TangentToWorldNormal(texture(uNormalMap, ex_TexCoord.xy).xyz);
+    vec3 lViewDir = normalize(ex_TangentViewPosition.xyz - ex_TangentFragPosition.xyz);
+    vec2 lTexCoord = ParallaxMapping(ex_TexCoord.xy, lViewDir);
+    vec3 lAlbedo = texture(uAlbedoMap, lTexCoord.xy).rgb;
+    float lAO = texture(uAmbientOcclusionMap, lTexCoord.xy).r;
+    float lRoughness = texture(uRoughnessMap, lTexCoord.xy).r;
+    float lMetallic = texture(uMetalnessMap, lTexCoord.xy).r;
+    vec3 lNormal =  TangentToWorldNormal(InvertY(texture(uNormalMap, lTexCoord.xy).rgb));
     //vec3 lNormal =  ex_Normal.xyz;
-    vec3 lPosition = ex_EyeSpacePosition.xyz;
+    
     float lEnvExposure = 0.1;
 
+    vec3 lPosition = ex_EyeSpacePosition.xyz;
     vec3 I = normalize(lPosition);
     //vec3 R = refract(I, -normal, 0.5);
     vec3 R = normalize(reflect(I, -lNormal));
@@ -147,7 +215,7 @@ vec3 PBRColor()
     lFinalColor += lAlbedo.rgb * ((lMetallic > 0.001) ? max(0.5, lRoughness) : 1.0);
     lFinalColor += BlendMaterial(lIblDiffuse, lIblSpecular, lAlbedo.rgb, lMetallic);
 
-    return lFinalColor;
+    return lFinalColor * lAO;
 }
 
 void main(void)
@@ -177,7 +245,7 @@ void main(void)
     
     out_Color.rgb = PBRColor();
     out_Color.rgb = toneMapping(out_Color.rgb, 2.2, 0.45);
-
+     
 
 
    // out_Color.rgb = gl_FragCoord.xxx / uViewport.x;

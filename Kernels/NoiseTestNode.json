@@ -1,0 +1,9 @@
+{
+    "name": "NoiseTestKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/NoiseTest.comp.glsl"
+        ]
+    }
+}

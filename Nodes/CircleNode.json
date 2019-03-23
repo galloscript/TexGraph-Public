@@ -1,0 +1,54 @@
+{
+    "name": "Circle",
+    "display_name": "Circle",
+    "category": "Generators",
+    "kernel": "CircleKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 100, 100, 100 ],
+    "input_pins": [],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R"
+        }
+    ],
+    "properties": [
+        {
+            "name": "radius",
+            "display_name": "Radius",
+            "type": "float",
+            "default_value": 0.5,
+            "min_value": 0.0,
+            "max_value": 1.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "falloff",
+            "display_name": "Falloff",
+            "type": "float",
+            "default_value": 0.02,
+            "min_value": 0.0,
+            "max_value": 1.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "offsetx",
+            "display_name": "Offset X",
+            "type": "float",
+            "default_value": 0.5,
+            "min_value": 0.0,
+            "max_value": 1.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "offsety",
+            "display_name": "Offset Y",
+            "type": "float",
+            "default_value": 0.5,
+            "min_value": 0.0,
+            "max_value": 1.0,
+            "step_value": 0.01
+        }
+    ]
+}

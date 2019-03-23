@@ -1,0 +1,9 @@
+{
+    "name": "TilingKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Tiling.comp.glsl"
+        ]
+    }
+}

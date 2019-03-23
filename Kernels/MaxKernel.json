@@ -1,0 +1,9 @@
+{
+    "name": "MaxKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Max.comp.glsl"
+        ]
+    }
+}

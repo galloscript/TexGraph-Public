@@ -1,14 +1,19 @@
 {
-    "name": "blur",
-    "display_name": "Blur",
+    "name": "Max",
+    "display_name": "Max",
     "category": "Operations",
-    "kernel": "BlurKernel",
+    "kernel": "MaxKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 0, 100, 50 ],
     "input_pins": [
         {
-            "name": "Input",
-            "display_name": "Input",
+            "name": "InputA",
+            "display_name": "InputA",
+            "type": "RGB"
+        },
+        {
+            "name": "InputB",
+            "display_name": "InputB",
             "type": "RGB"
         }
     ],
@@ -20,14 +25,5 @@
         }
     ],
     "properties": [
-        {
-            "name": "area",
-            "display_name": "Area",
-            "type": "float",
-            "default_value": 2.0,
-            "min_value": 0.0,
-            "max_value": 8.0,
-            "step_value": 0.01
-        }
     ]
 }

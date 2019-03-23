@@ -31,7 +31,7 @@ vec3 DrawCubemap(in vec2 aUV)
     pos.y *= float(gl_NumWorkGroups.y) / float(gl_NumWorkGroups.x);
     vec3 bgN = mat3(uBGRotMatrix) * -normalize(vec3(pos.x, pos.y, -1.5));
 
-    return textureLod(uEnvCubeMap, bgN, 5).rgb;
+    return textureLod(uEnvCubeMap, bgN, 0).rgb;
 }
 
 void main(void)

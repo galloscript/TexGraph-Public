@@ -1,0 +1,65 @@
+{
+    "name": "Perlin1",
+    "display_name": "Perlin1",
+    "category": "Generators",
+    "kernel": "Perlin1Kernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 0, 100, 0 ],
+    "input_pins": [
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R",
+            "uniform": "uOutput"
+        }
+    ],
+    "properties": [
+        {
+            "name": "frequency",
+            "display_name": "Frequency",
+            "type": "float",
+            "default_value": 5.0,
+            "min_value": 0.0,
+            "max_value": 50.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "persistence",
+            "display_name": "Persistence",
+            "type": "float",
+            "default_value": 1.0,
+            "min_value": 0.0,
+            "max_value": 2.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "lacunarity",
+            "display_name": "Lacunarity",
+            "type": "float",
+            "default_value": 2.0,
+            "min_value": 0.0,
+            "max_value": 50.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "octave_count",
+            "display_name": "Octave Count",
+            "type": "Integer",
+            "default_value": 6,
+            "min_value": 1,
+            "max_value": 8,
+            "step_value": 1
+        },
+        {
+            "name": "panz",
+            "display_name": "PanZ",
+            "type": "float",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 50,
+            "step_value": 0.01
+        }
+    ]
+}

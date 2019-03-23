@@ -25,9 +25,9 @@
             "display_name": "Bump",
             "type": "Float",
             "default_value": 15.0,
-            "min_value": 1.00,
-            "max_value": 1024.0,
-            "step_value" : 0.5
+            "min_value": 0.00,
+            "max_value": 15.0,
+            "step_value" : 0.01
         }
     ]
 }

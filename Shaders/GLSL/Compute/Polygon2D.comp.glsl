@@ -14,15 +14,18 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(binding = 0, rgba8) uniform image2D uOutputBuffer0;
 //layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
 
+layout(location = 100) uniform ivec3 uOutputBufferSize;
+layout(location = 101) uniform ivec3 uInvocationOffset;
+
 layout(location = 0)  uniform int      uSides;
 layout(location = 1)  uniform float    uFalloff;
 layout(location = 2)  uniform float    uZoom;
 
 void main(void)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy);
-    vec2 lImageSize = vec2(gl_NumWorkGroups.xy);
-    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(gl_NumWorkGroups.xy));         
+    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
+    //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
+    vec2 lImageSize = vec2(uOutputBufferSize.xy);     
     vec2 st = (vec2(lBufferCoord.x, lBufferCoord.y) - 0.5f * lImageSize) / lImageSize;
     st *= uZoom;
     st.y -= (uSides == 3) ? 0.25f : 0.0f;

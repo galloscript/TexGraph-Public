@@ -23,6 +23,9 @@ out vec3 ex_Normal;
 out vec3 ex_Tangent;
 out vec3 ex_Binormal;
 out vec4 ex_EyeSpacePosition;
+out vec3 ex_FragPosition;
+out vec3 ex_TangentViewPosition;
+out vec3 ex_TangentFragPosition;
 out mat4 ex_ModelViewMatrix;
 
 
@@ -30,11 +33,19 @@ void main(void)
 {
     ex_TexCoord = in_TexCoord;
     ex_ModelViewMatrix = uViewMatrix * uModelMatrix;
+    ex_FragPosition = (uModelMatrix * vec4(in_Position.xyz, 1.0)).xyz;
+    
     ex_EyeSpacePosition = ex_ModelViewMatrix * vec4(in_Position.xyz, 1.0);
-    mat3 lModelViewMat3 = mat3(ex_ModelViewMatrix);
+    mat3 lModelViewMat3 = mat3(ex_ModelViewMatrix); 
     ex_Normal = normalize(lModelViewMat3 * in_Normal.xyz).xyz;
     ex_Tangent = normalize(lModelViewMat3 * in_Tangent.xyz).xyz;
     ex_Binormal = normalize(lModelViewMat3 * in_Binormal.xyz).xyz;
+    
+    mat3 TBN = transpose(mat3(ex_Tangent, ex_Binormal, ex_Normal));
+    vec3 lViewPos = -(uViewMatrix * vec4(0, 0, 0, 1)).xyz;
+    ex_TangentViewPosition = TBN * lViewPos;
+    ex_TangentFragPosition = TBN * ex_FragPosition;
+
     gl_Position = uProjectionMatrix * ex_ModelViewMatrix * vec4(in_Position.xyz, 1.0);
 }
 
