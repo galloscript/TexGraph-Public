@@ -21,12 +21,36 @@
     ],
     "properties": [
         {
-            "name": "repeat",
-            "display_name": "Repeat",
-            "type": "Integer",
+            "name": "repeatx",
+            "display_name": "RepeatX",
+            "type": "Float",
             "default_value": 1,
             "min_value": 1,
             "max_value": 32
+        },
+        {
+            "name": "repeaty",
+            "display_name": "RepeatY",
+            "type": "Float",
+            "default_value": 1,
+            "min_value": 1,
+            "max_value": 32
+        },
+        {
+            "name": "offsetx",
+            "display_name": "OffsetX",
+            "type": "Float",
+            "default_value": 0,
+            "min_value": -1,
+            "max_value": 1
+        },
+        {
+            "name": "offsety",
+            "display_name": "OffsetY",
+            "type": "Float",
+            "default_value": 0,
+            "min_value": -1,
+            "max_value": 1
         }
     ]
 }

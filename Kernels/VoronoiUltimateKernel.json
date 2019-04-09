@@ -1,0 +1,10 @@
+{
+    "name": "VoronoiUltimateKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/NoisesCommon.glsl",
+            "Shaders/GLSL/Compute/VoronoiUltimate.comp.glsl"
+        ]
+    }
+}

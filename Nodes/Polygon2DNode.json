@@ -31,12 +31,20 @@
             "max_value": 1.0
         },
         {
-            "name": "zoom",
-            "display_name": "Zoom",
+            "name": "scalex",
+            "display_name": "ScaleX",
             "type": "float",
-            "default_value": 2.0,
-            "min_value": 1.0,
-            "max_value": 8.0
+            "default_value": 1.0,
+            "min_value": 0.0,
+            "max_value": 4.0
+        },
+        {
+            "name": "scaley",
+            "display_name": "ScaleY",
+            "type": "float",
+            "default_value": 1.0,
+            "min_value": 0.0,
+            "max_value": 4.0
         }
     ]
 }

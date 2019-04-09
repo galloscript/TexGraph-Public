@@ -26,13 +26,13 @@
             "name": "begin",
             "display_name": "Begin Color",
             "type": "Color",
-            "default_value": [ 0, 150, 0 ]
+            "default_value": [ 0, 0, 0 ]
         },
         {
             "name": "end",
             "display_name": "End Color",
             "type": "Color",
-            "default_value": [ 0, 0, 200 ]
+            "default_value": [ 255, 255, 255 ]
         }
     ]
 }

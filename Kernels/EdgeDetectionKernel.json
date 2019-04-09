@@ -1,0 +1,9 @@
+{
+    "name": "EdgeDetectionKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/EdgeDetection.comp.glsl"
+        ]
+    }
+}

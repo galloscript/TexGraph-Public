@@ -1,0 +1,97 @@
+{
+    "name": "VoronoiUltimate",
+    "display_name": "Voronoi Ultimate",
+    "category": "Generators",
+    "kernel": "VoronoiUltimateKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 0, 100, 0 ],
+    "input_pins": [
+    ],
+    "output_pins": [
+        {
+            "name": "Crystals",
+            "display_name": "Crystals",
+            "type": "R"
+        },
+        {
+            "name": "Cracks",
+            "display_name": "Cracks",
+            "type": "R"
+        },
+        {
+            "name": "Code",
+            "display_name": "Code",
+            "type": "R"
+        },
+        {
+            "name": "Cells",
+            "display_name": "Cells",
+            "type": "R"
+        }
+    ],
+    "properties": [
+        {
+            "name": "seed",
+            "display_name": "Seed",
+            "type": "Integer",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 255,
+            "step_value": 1
+        },
+        {
+            "name": "thickness",
+            "display_name": "Thickness",
+            "type": "float",
+            "default_value": 0.05,
+            "min_value": 0.0,
+            "max_value": 1.0,
+            "step_value": 0.001
+        },
+        {
+            "name": "hardness",
+            "display_name": "Hardness",
+            "type": "float",
+            "default_value": 0.00,
+            "min_value": 0.0,
+            "max_value": 1.0,
+            "step_value": 0.001
+        },
+        {
+            "name": "panx",
+            "display_name": "PanX",
+            "type": "float",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 1,
+            "step_value": 0.01
+        },
+        {
+            "name": "pany",
+            "display_name": "PanY",
+            "type": "float",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 1,
+            "step_value": 0.01
+        },
+        {
+            "name": "scalex",
+            "display_name": "ScaleX",
+            "type": "float",
+            "default_value": 4,
+            "min_value": 1,
+            "max_value": 256,
+            "step_value": 1.0
+        },
+        {
+            "name": "scaley",
+            "display_name": "ScaleY",
+            "type": "float",
+            "default_value": 4,
+            "min_value": 1,
+            "max_value": 256,
+            "step_value": 1.0
+        }
+    ]
+}

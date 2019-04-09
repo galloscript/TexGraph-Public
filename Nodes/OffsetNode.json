@@ -25,5 +25,21 @@
         }
     ],
     "properties": [
+        {
+            "name": "offsetX",
+            "display_name": "OffsetX",
+            "type": "float",
+            "default_value": 0.0,
+            "min_value": -1,
+            "max_value": 1
+        },
+        {
+            "name": "offsetY",
+            "display_name": "OffsetY",
+            "type": "float",
+            "default_value": 0.0,
+            "min_value": -1,
+            "max_value": 1
+        }
     ]
 }

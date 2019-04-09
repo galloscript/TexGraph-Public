@@ -64,8 +64,8 @@ void main(void)
     vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
 
     const vec2 size = vec2(2.0,0.0);
-    const ivec2 lAdjacentCoord = max(ivec2(1, 1), ivec2(uOutputBufferSize.x / 256.f, uOutputBufferSize.y / 256.f));
-
+    const ivec2 lAdjacentCoord = ivec2(1, 1); //max(ivec2(1, 1), ivec2(uOutputBufferSize.x / 512.0f, uOutputBufferSize.y / 512.0f)); 
+     
     ivec2 lCoordList[5] = ivec2[5]
     (
         ivec2(lBufferCoord.x,     lBufferCoord.y    ),

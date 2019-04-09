@@ -1,0 +1,45 @@
+{
+    "name": "Squircle",
+    "display_name": "Squircle",
+    "category": "Generators",
+    "kernel": "SquircleKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 100, 100, 100 ],
+    "input_pins": [],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R"
+        }
+    ],
+    "properties": [
+        {
+            "name": "margin",
+            "display_name": "Margin",
+            "type": "Float",
+            "default_value": 0.0,
+            "min_value": 0.0,
+            "max_value": 16.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "falloff",
+            "display_name": "Falloff",
+            "type": "Float",
+            "default_value": 1.0,
+            "min_value": 0.0,
+            "max_value": 32.0,
+            "step_value": 0.01
+        },
+        {
+            "name": "corner",
+            "display_name": "Corner",
+            "type": "Float",
+            "default_value": 4.0,
+            "min_value": 0.0,
+            "max_value": 16.0,
+            "step_value": 0.01
+        }
+    ]
+}

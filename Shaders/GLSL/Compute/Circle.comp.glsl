@@ -29,18 +29,27 @@ layout(location = 3)  uniform float     uOffsetY;
 float Circle(vec2 uv, vec2 pos, float rad, float falloff, float aExtent) 
 {
 	float d = (length(pos - uv) - rad) / aExtent;
-	float t = smoothstep(-falloff, 0.0, d);
-	return 1.0 - t;
+	float t = smoothstep(-falloff, 0.005, d);
+	return  1.0 - t;
+}
+
+float Circle2(in vec2 _st, in float _radius, float _falloff)
+{
+    vec2 dist = _st-vec2(0.5);
+	return 1.-smoothstep(-_falloff + _radius-(_radius*0.01),
+                         _radius+(_radius*0.01),
+                         dot(dist,dist)*4.0);
 }
 
 
 void main(void)
 {
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
-    vec2 lUV = vec2(lBufferCoord.xy);
+    vec2 lUV = vec2(lBufferCoord.xy) / uOutputBufferSize.xy;
     vec2 lSize = vec2(uOutputBufferSize.xy);
-    vec2 lPosition = vec2(uOffsetX, uOffsetY) * uOutputBufferSize.xy;
-    float lValue = Circle(lUV, lPosition, uRadius * lSize.x * 0.5f, uFalloff, uOutputBufferSize.x);
+    vec2 lPosition = vec2(uOffsetX, uOffsetY) - 0.5;
+    //float lValue = Circle(lUV, lPosition, uRadius * lSize.x * 0.5f, uFalloff, uOutputBufferSize.x);
+    float lValue = Circle2(lUV + lPosition, uRadius, uFalloff);
     vec4 lOutputColor = vec4(vec3(lValue, lValue, lValue), 1.0);
     imageStore (uOutputBuffer0, lBufferCoord, lOutputColor);
 }

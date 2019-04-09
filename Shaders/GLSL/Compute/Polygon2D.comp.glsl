@@ -19,7 +19,8 @@ layout(location = 101) uniform ivec3 uInvocationOffset;
 
 layout(location = 0)  uniform int      uSides;
 layout(location = 1)  uniform float    uFalloff;
-layout(location = 2)  uniform float    uZoom;
+layout(location = 2)  uniform float    uScaleX;
+layout(location = 3)  uniform float    uScaleY;
 
 void main(void)
 {
@@ -27,7 +28,8 @@ void main(void)
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     vec2 lImageSize = vec2(uOutputBufferSize.xy);     
     vec2 st = (vec2(lBufferCoord.x, lBufferCoord.y) - 0.5f * lImageSize) / lImageSize;
-    st *= uZoom;
+    st.x *= 5.0 - uScaleX;
+    st.y *= 5.0 - uScaleY;
     st.y -= (uSides == 3) ? 0.25f : 0.0f;
     float ata = atan(st.x, -st.y) + M_PI;
     float r = M_TWO_PI / float(uSides);

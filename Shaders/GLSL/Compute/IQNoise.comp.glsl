@@ -50,6 +50,13 @@ F1 noise(F3  x)
 F3 noise3d(F2 x) { return F3(noise(F3(x.x,x.y,x.y) * 100.f), noise(F3(x.y,x.x,x.x) * 200.f), noise(F3(x.y,x.x,x.y) * 300.f)); }
 
 F3 hash3(F2 p) { return fract(sin(F3(dot(p, F2(127.1, 311.7)), dot(p, F2(269.5, 183.3)), dot(p, F2(419.2, 371.9)))) * 43758.5453f); }
+/*
+vec2 Hash2(vec2 p, int aSeed)
+{
+    float r = (aSeed+523.0)*sin(dot(p, vec2(53.3158, 43.6143)));
+    return vec2(fract(15.32354 * r), fract(17.25865 * r));
+}
+*/
 
 F1 iqnoise(F2 x, F1 u, F1 v)
 {
@@ -58,7 +65,8 @@ F1 iqnoise(F2 x, F1 u, F1 v)
     for(F1 j = -2; j <= 2; ++j)
         for(F1 i = -2; i <= 2; ++i)
         {
-		    F3 o   = hash3(floor(x) + F2(i, j)) * F3(u, u, 1);
+		    F3 o   = hash3(mod(floor(x) + F2(i, j), vec2(uScaleX, uScaleY))) * F3(u, u, 1);
+            //F2 o     = Hash2(mod(floor(x) + F2(i, j), vec2(uScaleX, uScaleY)), 0) * F2(u, u); // voronoise
 		    F2 r   = F2 (i, j) - fract  (x) + F2(o);
 		    F1 ww = pow  (1 - smoothstep(.0f, 1.414f, sqrt(dot(r, r))), 1 + 63 * pow(1 - v, 4));
 		    va      += o.z*ww;

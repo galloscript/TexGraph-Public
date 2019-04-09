@@ -6,5 +6,11 @@
             "Shaders/GLSL/Compute/Common.glsl",
             "Shaders/GLSL/Compute/Perlin1.comp.glsl"
         ]
-    }
+    },
+    "shared_blocks": [
+        {
+            "name": "RandomVectors",
+            "binding": 20
+        }
+    ]
 }
