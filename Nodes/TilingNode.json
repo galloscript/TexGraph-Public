@@ -17,6 +17,11 @@
             "name": "Output",
             "display_name": "Output",
             "type": "RGB"
+        },
+        {
+            "name": "Code",
+            "display_name": "Code",
+            "type": "RGB"
         }
     ],
     "properties": [

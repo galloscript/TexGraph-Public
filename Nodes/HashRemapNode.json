@@ -1,0 +1,32 @@
+{
+    "name": "hash_remap",
+    "display_name": "Hash Remap",
+    "category": "Operations",
+    "kernel": "HashRemapKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+        {
+            "name": "input",
+            "display_name": "Input",
+            "type": "R"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "output",
+            "display_name": "Output",
+            "type": "R"
+        }
+    ],
+    "properties": [
+        {
+            "name": "seed",
+            "display_name": "Seed",
+            "type": "Integer",
+            "default_value": 0,
+            "min_value": 0,
+            "max_value": 255
+        }
+    ]
+}

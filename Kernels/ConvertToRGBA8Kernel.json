@@ -1,0 +1,8 @@
+{
+    "name": "ConvertToRGBA8Kernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Utils/ConvertToRGBA8.comp.glsl"
+        ]
+    }
+}

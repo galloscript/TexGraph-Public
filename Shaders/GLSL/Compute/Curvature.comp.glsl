@@ -15,51 +15,59 @@ layout(binding = 1, rgba16f) uniform image2D uInputBuffer0;
 layout(location = 100) uniform ivec3 uOutputBufferSize;
 layout(location = 101) uniform ivec3 uInvocationOffset;
 
-layout(location = 0)  uniform float uBumpHeightScale;
+layout(location = 0)  uniform int uRadius;
+
 
 ivec2   WrapCoord(ivec2 aCoord, ivec2 aSize);
 int     WrapTo(int X, int W);
 ivec2   WrapTo(ivec2 X, ivec2 W);
 vec4    SampleWarped(layout(rgba16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
 
+float GenerateCurviness(ivec2 aCoord, ivec2 aTexSize, int aRadius)
+{
+    //determine curviness at each point and return it
+    float curviness = 0.;
+    float vcurviness, hcurviness;
+    float lValueMultiplier = aTexSize.x / 256.0;
+    for(int d = 1; d < (aRadius + 1); d++)
+    {
+        float h   = imageLoad(uInputBuffer0, aCoord).r * lValueMultiplier;
+        float hv1 = SampleWarped(uInputBuffer0, aCoord - ivec2(0., d), aTexSize).r * lValueMultiplier;
+        float hv2 = SampleWarped(uInputBuffer0, aCoord + ivec2(0., d), aTexSize).r * lValueMultiplier;
+        float hh1 = SampleWarped(uInputBuffer0, aCoord - ivec2(d, 0.), aTexSize).r * lValueMultiplier;
+        float hh2 = SampleWarped(uInputBuffer0, aCoord + ivec2(d, 0.), aTexSize).r * lValueMultiplier;
+
+        if( hv1 < hv2 )
+        {
+            vcurviness = (h - hv2) - (hv1 - h);
+        }
+        else
+        {
+            vcurviness = (h - hv1) - (hv2 - h);
+        }
+
+        if( hh1 < hh2 )
+        {
+            hcurviness = (h - hh2) - (hh1 - h);
+        }
+        else
+        {
+            hcurviness = (h - hh1) - (hh2 - h);
+        }
+
+        curviness += (vcurviness + hcurviness) / (d*1.);
+    }
+    
+    return curviness;
+}
+
 void main(void)
 {
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     ivec2 lTexSize = ivec2(uOutputBufferSize.xy);
-    vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
-
-    const vec2 size = vec2(2.0,0.0);
-    const ivec2 lAdjacentCoord = ivec2(1, 1); //max(ivec2(1, 1), ivec2(uOutputBufferSize.x / 512.0f, uOutputBufferSize.y / 512.0f)); 
-     
-    ivec2 lCoordList[5] = ivec2[5]
-    (
-        ivec2(lBufferCoord.x,     lBufferCoord.y    ),
-        ivec2(WrapTo(lBufferCoord.x - lAdjacentCoord.x, lTexSize.x), lBufferCoord.y    ),
-        ivec2(WrapTo(lBufferCoord.x + lAdjacentCoord.x, lTexSize.x), lBufferCoord.y    ),
-        ivec2(lBufferCoord.x,     WrapTo(lBufferCoord.y - lAdjacentCoord.y, lTexSize.y)),
-        ivec2(lBufferCoord.x,     WrapTo(lBufferCoord.y + lAdjacentCoord.y, lTexSize.y))
-    );
-
-    double lHeightScale = uBumpHeightScale * uOutputBufferSize.x / 256.0f;
-    double s11 = (1.0 - lInputColor0.r) * lHeightScale;
-    double s01 = (1.0 - imageLoad(uInputBuffer0, lCoordList[1]).r) * lHeightScale;
-    double s21 = (1.0 - imageLoad(uInputBuffer0, lCoordList[2]).r) * lHeightScale;
-    double s10 = (1.0 - imageLoad(uInputBuffer0, lCoordList[3]).r) * lHeightScale;
-    double s12 = (1.0 - imageLoad(uInputBuffer0, lCoordList[4]).r) * lHeightScale;
     
-    //debug: precision clamping
-    //s11 = int(s11 * 255) / 255.f;
-    //s01 = int(s01 * 255) / 255.f;
-    //s21 = int(s21 * 255) / 255.f;
-    //s10 = int(s10 * 255) / 255.f;
-    //s12 = int(s12 * 255) / 255.f;
-
-    dvec3 va = normalize(dvec3(size.xy,s21-s01));
-    dvec3 vb = normalize(dvec3(size.yx,s12-s10));
-    dvec4 bump = dvec4( cross(va,vb), s11 );
-    
-    const vec4 lOutputColor = vec4((bump.xyz + 1.0) * 0.5, lInputColor0.a);
+    const vec4 lOutputColor = vec4(vec3(GenerateCurviness(lBufferCoord, uOutputBufferSize.xy, uRadius)), 1.0) + 0.5;
     imageStore (uOutputBuffer0, lBufferCoord, lOutputColor);
 }
 

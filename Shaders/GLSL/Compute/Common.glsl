@@ -6,25 +6,6 @@
 
 #version 430
 
-//wraps a coord that my be ouside of bounds returning it in a xy repeat basis
-ivec2 wrap_coord(in ivec2 aCoord, in ivec2 aImageSize)
-{
-    vec2 lSize = vec2(aImageSize);
-    ivec2 lImageCoord = aCoord;
-    lImageCoord.x = (lImageCoord.x < 0) ? int(lSize.x) - lImageCoord.x :  lImageCoord.x;
-    lImageCoord.y = (lImageCoord.y < 0) ? int(lSize.y) - lImageCoord.y :  lImageCoord.y;
-    lImageCoord.x = lImageCoord.x % int(lSize.x);
-    lImageCoord.y = lImageCoord.y % int(lSize.y);
-    return lImageCoord;
-}
-
-//return integer coords from uvs
-ivec2 uv2coord(in vec2 aUV, in ivec2 aImageSize)
-{
-    vec2 lSize = vec2(aImageSize);
-    return wrap_coord(ivec2(aUV * lSize), aImageSize);
-}
-
 vec4 boxmap( sampler2D sam, in vec3 p, in vec3 n, in float k )
 {
     vec3 m = pow( abs(n), vec3(k) );
@@ -53,3 +34,40 @@ vec3 spheremap( sampler2D sam, in vec3 d )
 #endif    
 }
 
+
+ivec2 WrapCoord(ivec2 aCoord, ivec2 aSize)
+{
+    ivec2 lOutCoord = aCoord;
+
+    lOutCoord.x = lOutCoord.x % aSize.x;
+    lOutCoord.y = lOutCoord.y % aSize.y;
+
+    lOutCoord.x = (lOutCoord.x < 0) ? aSize.x + lOutCoord.x : lOutCoord.x;
+    lOutCoord.y = (lOutCoord.y < 0) ? aSize.y + lOutCoord.y : lOutCoord.y;
+
+    return lOutCoord;
+}
+
+int WrapTo(int X, int W)
+{
+	X = X % W;
+
+	if(X < 0)
+	{
+		X += W;
+	}
+
+    return X;
+}
+
+ivec2 WrapTo(ivec2 X, ivec2 W)
+{
+    X.x = WrapTo(X.x, W.x);
+    X.y = WrapTo(X.y, W.y);
+    return X;
+}
+
+vec4 SampleWarped(layout(rgba16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize)
+{
+    return imageLoad(aSrcImage,  WrapTo(aBaseCoord, aTexSize));
+}

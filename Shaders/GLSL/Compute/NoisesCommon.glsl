@@ -6,6 +6,21 @@
 #version 430
 precision highp float;
 
+// The name of the block is used for finding the index location only
+layout (std140, binding = 20) uniform SBRandomVectorsBlock 
+{
+    double gRandomVectors [1024]; // This is the important name (in the shader).
+};
+
+#define SHIFT_NOISE_GEN 8
+const int X_NOISE_GEN = 1619;
+const int Y_NOISE_GEN = 31337;
+const int Z_NOISE_GEN = 6971;
+const int SEED_NOISE_GEN = 1050;
+
+#define LinearInterp mix
+
+
 //------------------------------------------------------------------------
 vec2 Hash2(vec2 p, int aSeed)
 {
@@ -13,77 +28,134 @@ vec2 Hash2(vec2 p, int aSeed)
     return vec2(fract(15.32354 * r), fract(17.25865 * r));
 }
 
-vec4 VoronoiUltimate( in vec2 x, in vec2 aTiling, in vec2 aEdges, int aSeed )
-{
-    x *= aTiling;
-    ivec2 p = ivec2(floor( x ));
-    vec2  f = fract( x );
-
-    ivec2 mb;
-    vec2 mr;
-
-    float res = 8.0;
-    for( int j=-1; j<=1; j++ )
-    for( int i=-1; i<=1; i++ )
-    {
-        ivec2 b = ivec2( i, j );
-        vec2  r = vec2( b ) + Hash2( mod(p + b, aTiling), aSeed ) - f;
-        float d = dot(r,r);
-
-        if( d < res )
-        {
-            res = d;
-            mr = r;
-            mb = b;
-        }
-    }
-
-    float va = 0;
-	float wt = 0;
-    float cells = 1.0e10;
-    res = 8.0;
-    for( int j=-2; j<=2; j++ )
-    for( int i=-2; i<=2; i++ )
-    {
-        ivec2 b = mb + ivec2( i, j );
-        vec2  o = Hash2( mod(p + b, aTiling), aSeed );
-        vec2  r = vec2( b ) + o - f; //mod 4
-        float d = dot( 0.5*(mr+r), normalize(r-mr) );
-        float drr = dot(r, r);
-        res = min( res, d );
-        cells = min(cells, drr);
-		float ww = pow  (1 - smoothstep(.0f, 1.414f, sqrt(drr)), 64);
-		va      += o.y*ww;
-		wt      += ww;
-    }
-
-    const float border = 1.0 - smoothstep( aEdges.x, aEdges.y, res ); //(edges: 0.0, 0.05)
-    const float eschema = va / wt;
-    return vec4(res, border, eschema, 1.0 - cells);
-}
-
-
 /*
-
-
-*/
-
-/*
-float VoronoiBorder( in vec2 p, in vec2 aEdges, in vec2 aTiling, in int aSeed )
+double LinearInterp (double n0, double n1, double a)
 {
-    float dis = VoronoiDistance( p, aTiling, aEdges, aSeed );
-
-    return 1.0 - smoothstep( aEdges.x, aEdges.y, dis );
+    return ((1.0 - a) * n0) + (a * n1);
 }*/
 
-/*
-void main(void)
+double SCurve5 (double a)
 {
-    ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
-    vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
-    vec4 lInputColor = imageLoad(uInputBuffer0, lBufferCoord);
-    float lPattern = VoronoiBorder(lUV, vec2(0.0, 0.05), vec2(1));
-    vec4 lColor = vec4(vec3(lPattern), 1.0);
-    imageStore (uOutputBuffer0, lBufferCoord, lColor);
+    double a3 = a * a * a;
+    double a4 = a3 * a;
+    double a5 = a4 * a;
+    return (6.0 * a5) - (15.0 * a4) + (10.0 * a3);
 }
-*/
+
+double MakeInt32Range (double n)
+{
+    if (n >= 1073741824.0) 
+    {
+        return (2.0 * mod (n, 1073741824.0)) - 1073741824.0;
+    } 
+    else if (n <= -1073741824.0) 
+    {
+        return (2.0 * mod (n, 1073741824.0)) + 1073741824.0;
+    } 
+    else 
+    {
+        return n;
+    }
+}
+
+int IntValueNoise3D (int x, int y, int z, int seed)
+{
+  // All constants are primes and must remain prime in order for this noise
+  // function to work correctly.
+  int n = (
+      X_NOISE_GEN    * x
+    + Y_NOISE_GEN    * y
+    + Z_NOISE_GEN    * z
+    + SEED_NOISE_GEN * seed)
+    & 0x7fffffff;
+  n = (n >> 13) ^ n;
+  return (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
+}
+
+
+double ValueNoise3D (int x, int y, int z, int seed)
+{
+    return 1.0 - double(IntValueNoise3D (x, y, z, seed) / 1073741824.0);
+}
+
+double GradientNoise3D (double fx, double fy, double fz, int ix, int iy, int iz, int seed)
+{
+    // Randomly generate a gradient vector given the integer coordinates of the
+    // input value.  This implementation generates a random number and uses it
+    // as an index into a normalized-vector lookup table.
+    int vectorIndex = (
+      X_NOISE_GEN    * ix
+    + Y_NOISE_GEN    * iy
+    + Z_NOISE_GEN    * iz
+    + SEED_NOISE_GEN * seed)
+    & 0xffffffff;
+    vectorIndex ^= (vectorIndex >> SHIFT_NOISE_GEN);
+    vectorIndex &= 0xff;
+
+    double xvGradient = gRandomVectors[(vectorIndex << 2)    ];
+    double yvGradient = gRandomVectors[(vectorIndex << 2) + 1];
+    double zvGradient = gRandomVectors[(vectorIndex << 2) + 2];
+
+    /*vec4 lRandomVector = gRandomVectors[(vectorIndex << 2)];
+    double xvGradient = lRandomVector.x;
+    double yvGradient = lRandomVector.y;
+    double zvGradient = lRandomVector.z;*/
+
+    //double xvGradient = ValueNoise3D(ix, iy, iz, 0);
+    //double yvGradient = ValueNoise3D(ix, iy, iz, 1);
+    //double zvGradient = ValueNoise3D(ix, iy, iz, 2);
+
+    // Set up us another vector equal to the distance between the two vectors
+    // passed to this function.
+    double xvPoint = (fx - double(ix));
+    double yvPoint = (fy - double(iy));
+    double zvPoint = (fz - double(iz));
+
+    // Now compute the dot product of the gradient vector with the distance
+    // vector.  The resulting value is gradient noise.  Apply a scaling value
+    // so that this noise value ranges from -1.0 to 1.0.
+    return ((xvGradient * xvPoint)
+            + (yvGradient * yvPoint)
+            + (zvGradient * zvPoint)) * 2.12;
+}
+
+double GradientCoherentNoise3D (double x, double y, double z, int seed)
+{
+    // Create a unit-length cube aligned along an integer boundary.  This cube
+    // surrounds the input point.
+    int x0 = (x > 0.0? int(x): int(x) - 1);
+    int x1 = x0 + 1;
+    int y0 = (y > 0.0? int(y): int(y) - 1);
+    int y1 = y0 + 1;
+    int z0 = (z > 0.0? int(z): int(z) - 1);
+    int z1 = z0 + 1;
+
+    // Map the difference between the coordinates of the input value and the
+    // coordinates of the cube's outer-lower-left vertex onto an S-curve.
+    double xs = 0, ys = 0, zs = 0;
+    xs = SCurve5 (x - double(x0));
+    ys = SCurve5 (y - double(y0));
+    zs = SCurve5 (z - double(z0));
+
+    // Now calculate the noise values at each vertex of the cube.  To generate
+    // the coherent-noise value at the input point, interpolate these eight
+    // noise values using the S-curve value as the interpolant (trilinear
+    // interpolation.)
+    double n0, n1, ix0, ix1, iy0, iy1;
+    n0   = GradientNoise3D (x, y, z, x0, y0, z0, seed);
+    n1   = GradientNoise3D (x, y, z, x1, y0, z0, seed);
+    ix0  = LinearInterp (n0, n1, xs);
+    n0   = GradientNoise3D (x, y, z, x0, y1, z0, seed);
+    n1   = GradientNoise3D (x, y, z, x1, y1, z0, seed);
+    ix1  = LinearInterp (n0, n1, xs);
+    iy0  = LinearInterp (ix0, ix1, ys);
+    n0   = GradientNoise3D (x, y, z, x0, y0, z1, seed);
+    n1   = GradientNoise3D (x, y, z, x1, y0, z1, seed);
+    ix0  = LinearInterp (n0, n1, xs);
+    n0   = GradientNoise3D (x, y, z, x0, y1, z1, seed);
+    n1   = GradientNoise3D (x, y, z, x1, y1, z1, seed);
+    ix1  = LinearInterp (n0, n1, xs);
+    iy1  = LinearInterp (ix0, ix1, ys);
+
+    return LinearInterp (iy0, iy1, zs);
+}

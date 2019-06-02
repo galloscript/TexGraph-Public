@@ -12,8 +12,8 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(location = 100) uniform ivec3 uOutputBufferSize;
 layout(location = 101) uniform ivec3 uInvocationOffset;
 
-layout(binding = 0, rgba8) uniform image2D uOutputBuffer0;
-layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
+layout(binding = 0, rgba16f) uniform image2D uOutputBuffer0;
+layout(binding = 1, rgba16f) uniform image2D uInputBuffer0;
 
 //layout(location = 0) uniform int    uKernelSize;
 //layout(location = 1) uniform float  uSigma;
@@ -53,6 +53,8 @@ const float sKernelTableD[9][9] =  float[][](float[](0.010989,	0.011474,	0.01183
                                             float[](0.011833,	0.012355,	0.012742,	0.01298	,    0.01306,    0.01298,    0.012742,	0.012355,	0.011833),
                                             float[](0.011474,	0.01198	,   0.012355,	0.012586,	0.012664,	0.012586,	0.012355,	0.01198	,    0.011474),
                                             float[](0.010989,	0.011474,	0.011833,	0.012054,	0.012129,	0.012054,	0.011833,	0.011474,	0.010989));
+
+vec4    SampleWarped(layout(rgba16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
 
 vec4 Blur(ivec2 aBufferCoord)
 {
@@ -94,12 +96,30 @@ vec4 Blur(ivec2 aBufferCoord)
     return lColorSum;
 }
 
+vec4 blur13(ivec2 uv, ivec2 resolution, vec2 direction) 
+{
+    vec4 color = vec4(0.0);
+    ivec2 off1 = ivec2(vec2(1.411764705882353) * direction);
+    ivec2 off2 = ivec2(vec2(3.2941176470588234) * direction);
+    ivec2 off3 = ivec2(vec2(5.176470588235294) * direction);
+    color += SampleWarped(uInputBuffer0, uv, resolution) * 0.1964825501511404;
+    color += SampleWarped(uInputBuffer0, uv + off1, resolution) * 0.2969069646728344;
+    color += SampleWarped(uInputBuffer0, uv - off1, resolution) * 0.2969069646728344;
+    color += SampleWarped(uInputBuffer0, uv + off2, resolution) * 0.09447039785044732;
+    color += SampleWarped(uInputBuffer0, uv - off2, resolution) * 0.09447039785044732;
+    color += SampleWarped(uInputBuffer0, uv + off3, resolution) * 0.010381362401148057;
+    color += SampleWarped(uInputBuffer0, uv - off3, resolution) * 0.010381362401148057;
+    return color;
+}
+
+
 void main(void)
 {
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     //vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
-    vec4 lOutputColor = Blur(lBufferCoord);
+    //vec4 lOutputColor = blur13(lBufferCoord, uOutputBufferSize.xy, vec2(1.0 - uArea, uArea) * 1.1);
+    vec4 lOutputColor = vec4(Blur(lBufferCoord).xyz, 1.0);
     //const vec4 lOutputColor = vec4(vec3(lColorSum.x, lColorSum.y, lColorSum.z), lInputColor0.a);
     imageStore (uOutputBuffer0, lBufferCoord, lOutputColor);
 }

@@ -35,6 +35,12 @@
             "display_name": "Color",
             "type": "Color",
             "default_value": [ 255, 255, 255 ]
+        },
+        {
+            "name": "ignore_input",
+            "display_name": "Ignore inputs",
+            "type": "Bool",
+            "default_value": false
         }
     ]
 }

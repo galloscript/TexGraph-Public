@@ -9,11 +9,11 @@ precision highp float;
 
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
-layout(binding = 0, rgba8) uniform image2D uOutputBuffer0;
+layout(binding = 0, rgba16f) uniform image2D uOutputBuffer0;
 /*
-layout(binding = 1, rgba8) uniform image2D uInputBuffer0;
-layout(binding = 2, rgba8) uniform image2D uInputBuffer1;
-layout(binding = 3, rgba8) uniform image2D uMaskBuffer;
+layout(binding = 1, rgba16f) uniform image2D uInputBuffer0;
+layout(binding = 2, rgba16f) uniform image2D uInputBuffer1;
+layout(binding = 3, rgba16f) uniform image2D uMaskBuffer;
 */
 
 layout(location = 100) uniform ivec3 uOutputBufferSize;

@@ -1,8 +1,8 @@
 {
-    "name": "normal",
-    "display_name": "Normal",
+    "name": "curvature",
+    "display_name": "Curvature",
     "category": "Operations",
-    "kernel": "NormalKernel",
+    "kernel": "CurvatureKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 255, 128, 255 ],
     "input_pins": [
@@ -21,13 +21,12 @@
     ],
     "properties": [
         {
-            "name": "bump",
-            "display_name": "Bump",
-            "type": "Float",
-            "default_value": 15.0,
-            "min_value": 0.00,
-            "max_value": 100.0,
-            "step_value" : 0.01
+            "name": "radius",
+            "display_name": "Radius",
+            "type": "Integer",
+            "default_value": 7.0,
+            "min_value": 0,
+            "max_value": 20
         }
     ]
 }

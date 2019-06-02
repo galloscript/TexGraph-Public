@@ -1,0 +1,9 @@
+{
+    "name": "CurvatureKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/Compute/Common.glsl",
+            "Shaders/GLSL/Compute/Curvature.comp.glsl"
+        ]
+    }
+}

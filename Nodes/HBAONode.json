@@ -1,0 +1,32 @@
+{
+    "name": "height2ao",
+    "display_name": "Height2AO",
+    "category": "Filters",
+    "kernel": "HBAOKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+    "color": [ 200, 0, 0 ],
+    "input_pins": [
+        {
+            "name": "height",
+            "display_name": "Height",
+            "type": "R"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "ao",
+            "display_name": "AO",
+            "type": "R"
+        }
+    ],
+    "properties": [
+        {
+            "name": "radius",
+            "display_name": "aRadius",
+            "type": "Float",
+            "default_value": 1.0,
+            "min_value": 1.0,
+            "max_value": 32.0
+        }
+    ]
+}

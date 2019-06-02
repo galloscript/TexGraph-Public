@@ -1,11 +1,10 @@
 {
-    "name": "Perlin1Kernel",
-    "chop_extent": 64,
+    "name": "HBAOKernel",
     "compute_files": {
         "glsl": [
             "Shaders/GLSL/Compute/Common.glsl",
             "Shaders/GLSL/Compute/NoisesCommon.glsl",
-            "Shaders/GLSL/Compute/Perlin1.comp.glsl"
+            "Shaders/GLSL/Compute/HBAO.comp.glsl"
         ]
     },
     "shared_blocks": [

@@ -22,9 +22,9 @@ struct TLight
 #define MAX_LIGHTS 3
 TLight sLights[MAX_LIGHTS] = TLight[MAX_LIGHTS]
 (
-    TLight(vec3(3.5, -6.0,  8.0), vec3(1.0, 1.0, 1.0)),
-    TLight(vec3(-7.5, -6.0, 8.0), vec3(1.0, 1.0, 1.0)),
-    TLight(vec3(0.0,  16.0, 8.0), vec3(1.0, 1.0, 1.0))
+    TLight(vec3(3.5, -6.0,  8.0), vec3(0.2, 0.2, 0.2) * 5.0),
+    TLight(vec3(-16.0, -6.0, 8.0), vec3(0.3, 0.0, 0.0)),
+    TLight(vec3(16.0,  16.0, 8.0), vec3(0.05, 0.3, 0.3))
 );
 
 const vec3 sLightPos = vec3(2.5, -9.0, 10.0);
@@ -50,21 +50,24 @@ layout(location = 122) uniform sampler2D uMetalnessMap;
 layout(location = 123) uniform sampler2D uNormalMap;
 layout(location = 124) uniform sampler2D uHeightMap;   
 layout(location = 125) uniform sampler2D uAmbientOcclusionMap;
-layout(location = 126) uniform sampler2D uCustomMap0;
-layout(location = 127) uniform sampler2D uCustomMap1;
-layout(location = 128) uniform sampler2D uCustomMap2;
-layout(location = 129) uniform sampler2D uCustomMap3;
-layout(location = 130) uniform sampler2D uCustomMap4;
-layout(location = 131) uniform sampler2D uCustomMap5;
-layout(location = 132) uniform sampler2D uCustomMap6;
-layout(location = 133) uniform sampler2D uCustomMap7;
-layout(location = 134) uniform sampler2D uCustomMap8;
+layout(location = 126) uniform sampler2D uEmissiveMap;
+layout(location = 127) uniform sampler2D uCustomMap0;
+layout(location = 128) uniform sampler2D uCustomMap1;
+layout(location = 129) uniform sampler2D uCustomMap2;
+layout(location = 130) uniform sampler2D uCustomMap3;
+layout(location = 131) uniform sampler2D uCustomMap4;
+layout(location = 132) uniform sampler2D uCustomMap5;
+layout(location = 133) uniform sampler2D uCustomMap6;
+layout(location = 134) uniform sampler2D uCustomMap7;
+layout(location = 135) uniform sampler2D uCustomMap8;
 
 layout(location = 0) out vec4 out_Color;
 /*layout(location = 1) out vec4 out_AuxValues;
 layout(location = 2) out vec4 out_Normal;
 layout(location = 3) out vec4 out_Position;
 layout(location = 4) out vec4 out_PBRInfo;*/
+
+const float uEmissiveIntensity = 8;
 
 vec3 InvertY(in vec3 aVec3)
 {
@@ -112,7 +115,7 @@ vec3 BlendMaterial(vec3 Kdiff, vec3 Kspec, vec3 Kbase, float metallic)
 
 vec4 CubeMapExposure(samplerCube _cubeMap, vec3 _n, float _lod, float _exposure)
 {
-    return textureLod(_cubeMap, mat3(uBGRotMatrix) * _n, _lod) * pow(2.0, _exposure);
+    return textureLod(_cubeMap, mat3(uBGRotMatrix) * _n, _lod);// * pow(2.0, _exposure);
 }
 /*
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
@@ -134,7 +137,7 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
     const float height_scale = 0.05;
     // number of depth layers
     const float minLayers = 8.0;
-    const float maxLayers = 32.0;
+    const float maxLayers = 16.0;
     float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));  
     // calculate the size of each layer
     float layerDepth = 1.0 / numLayers;
@@ -176,6 +179,7 @@ vec3 PBRColor()
     vec3 lViewDir = normalize(ex_TangentViewPosition.xyz - ex_TangentFragPosition.xyz);
     vec2 lTexCoord = ParallaxMapping(ex_TexCoord.xy, lViewDir);
     vec3 lAlbedo = texture(uAlbedoMap, lTexCoord.xy).rgb;
+    vec3 lEmissive = texture(uEmissiveMap, lTexCoord.xy).rgb;
     float lAO = texture(uAmbientOcclusionMap, lTexCoord.xy).r;
     float lRoughness = texture(uRoughnessMap, lTexCoord.xy).r;
     float lMetallic = texture(uMetalnessMap, lTexCoord.xy).r;
@@ -215,7 +219,7 @@ vec3 PBRColor()
     lFinalColor += lAlbedo.rgb * ((lMetallic > 0.001) ? max(0.5, lRoughness) : 1.0);
     lFinalColor += BlendMaterial(lIblDiffuse, lIblSpecular, lAlbedo.rgb, lMetallic);
 
-    return lFinalColor * lAO;
+    return (lFinalColor * lAO) + (lEmissive * uEmissiveIntensity);
 }
 
 void main(void)
@@ -226,7 +230,8 @@ void main(void)
     //lTextureColor = lTextureColor * textureLod(uEnvCubeMap, -ex_Normal.xyz, lRoughness * 8.0).xyz;
     //lTextureColor = textureLod(uIntegratedBRDF, ex_TexCoord.xy, 0).xyz;
 
-    /*
+    out_Color.rgb = PBRColor();
+   /*
     for(int lLightIndex = 0; lLightIndex < MAX_LIGHTS; lLightIndex++)
     {
         vec3 N = ex_Normal.xyz;
@@ -235,18 +240,19 @@ void main(void)
         vec3 R = normalize(-reflect(L, N));  
 
         //calculate Diffuse Term:  
-        vec3 Idiff = sLights[lLightIndex].mColor * max(dot(N,L), 0.0) * lTextureColor;
-        Idiff = clamp(Idiff, 0.0, 1.0);
+        vec3 Idiff = sLights[lLightIndex].mColor * max(dot(N,L), 0.0) * 0.2;
+        Idiff = clamp(Idiff, 0.0, 100.0);
 
         out_Color.rgb += Idiff;  
     }*/
+    
+    //out_Color.rgb += 0.15;
 
     //dot(ex_Normal.xyz, normalize(sLights[0].mPosition - ex_EyeSpacePosition.xyz));
     
-    out_Color.rgb = PBRColor();
-    out_Color.rgb = toneMapping(out_Color.rgb, 2.2, 0.45);
-     
+    //out_Color.rgb = pow( out_Color.rgb, vec3(0.8545) );
 
+    //out_Color.rgb = toneMapping(out_Color.rgb, 2.6, 0.55);
 
    // out_Color.rgb = gl_FragCoord.xxx / uViewport.x;
     //out_Color = vec4(vec3(ex_TexCoord.x, ex_TexCoord.y, 0.0), 1.0);
