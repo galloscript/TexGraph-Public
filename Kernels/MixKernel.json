@@ -1,9 +1,25 @@
 {
-    "name": "MixKernel",
-    "compute_files": {
-        "glsl": [
-            "Shaders/GLSL/Compute/Common.glsl",
-            "Shaders/GLSL/Compute/Mix.comp.glsl"
-        ]
-    }
+    "kernel_list": [
+        {
+            "name": "MixKernel",
+            "compute_files": {
+                "glsl": [
+                    "Shaders/GLSL/Compute/Common.glsl",
+                    "Shaders/GLSL/Compute/Mix.comp.glsl"
+                ]
+            }
+        },
+        {
+            "name": "MixGreyscaleKernel",
+            "extra_defines": {
+                "KRN_MIX_GS": 1
+            },
+            "compute_files": {
+                "glsl": [
+                    "Shaders/GLSL/Compute/Common.glsl",
+                    "Shaders/GLSL/Compute/Mix.comp.glsl"
+                ]
+            }
+        }
+    ]
 }

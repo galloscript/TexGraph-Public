@@ -8,11 +8,11 @@ precision highp float;
 
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
-layout(binding = 0, rgba16f) uniform image2D uOutputBuffer0;
-layout(binding = 1, rgba16f) uniform image2D uOutputBuffer1;
-layout(binding = 2, rgba16f) uniform image2D uOutputBuffer2;
-layout(binding = 3, rgba16f) uniform image2D uOutputBuffer3;
-layout(binding = 4, rgba16f) uniform image2D uInputBuffer0;
+layout(binding = 0, r16f) uniform image2D uOutputBuffer0;
+layout(binding = 1, r16f) uniform image2D uOutputBuffer1;
+layout(binding = 2, r16f) uniform image2D uOutputBuffer2;
+layout(binding = 3, r16f) uniform image2D uOutputBuffer3;
+layout(location = 80) uniform sampler2D uInputBuffer0;
 
 layout(location = 100) uniform ivec3 uOutputBufferSize;
 layout(location = 101) uniform ivec3 uInvocationOffset;
@@ -83,7 +83,7 @@ void main(void)
 {
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
-    //vec4 lInputColor = imageLoad(uInputBuffer0, lBufferCoord);
+    //vec4 lInputColor = texelFetch(uInputBuffer0, lBufferCoord, 0);
     vec4 lPattern = VoronoiUltimate(lUV + vec2(uPanX, uPanY), vec2(uScaleX, uScaleY), vec2(uHardness, uThickness), uSeed);
     //vec4 lColor = vec4(vec3(lPattern), 1.0);
     imageStore (uOutputBuffer0, lBufferCoord, vec4(vec3(lPattern.x), 1.0));

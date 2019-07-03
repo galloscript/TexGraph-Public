@@ -11,22 +11,22 @@
         {
             "name": "Crystals",
             "display_name": "Crystals",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "Cracks",
             "display_name": "Cracks",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "Code",
             "display_name": "Code",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "Cells",
             "display_name": "Cells",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "properties": [

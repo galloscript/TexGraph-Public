@@ -13,5 +13,6 @@
             "name": "RandomVectors",
             "binding": 20
         }
-    ]
+    ],
+    "max_tile_size" :  256
 }

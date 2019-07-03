@@ -10,7 +10,7 @@
         {
             "name": "output",
             "display_name": "Output",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "properties": [

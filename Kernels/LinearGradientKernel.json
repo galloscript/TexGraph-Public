@@ -1,9 +1,9 @@
 {
-    "name": "GreyGradientMixKernel",
+    "name": "LinearGradientKernel",
     "compute_files": {
         "glsl": [
             "Shaders/GLSL/Compute/Common.glsl",
-            "Shaders/GLSL/Compute/GreyGradientMix.comp.glsl"
+            "Shaders/GLSL/Compute/LinearGradient.comp.glsl"
         ]
     }
 }

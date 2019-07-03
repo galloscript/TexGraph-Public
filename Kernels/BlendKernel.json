@@ -1,9 +1,13 @@
 {
-    "name": "BlendKernel",
-    "compute_files": {
-        "glsl": [
-            "Shaders/GLSL/Compute/Common.glsl",
-            "Shaders/GLSL/Compute/Blend.comp.glsl"
-        ]
-    }
+    "kernel_list": [
+        {
+            "name": "BlendKernel",
+            "compute_files": {
+                "glsl": [
+                    "Shaders/GLSL/Compute/Common.glsl",
+                    "Shaders/GLSL/Compute/Blend.comp.glsl"
+                ]
+            }
+        }
+    ]
 }

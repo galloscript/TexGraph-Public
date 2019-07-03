@@ -1,9 +1,13 @@
 {
-    "name": "BlurKernel",
-    "compute_files": {
-        "glsl": [
-            "Shaders/GLSL/Compute/Common.glsl",
-            "Shaders/GLSL/Compute/Blur.comp.glsl"
-        ]
-    }
+    "kernel_list": [
+        {
+            "name": "BlurKernel",
+            "compute_files": {
+                "glsl": [
+                    "Shaders/GLSL/Compute/Common.glsl",
+                    "Shaders/GLSL/Compute/Blur.comp.glsl"
+                ]
+            }
+        }
+    ]
 }

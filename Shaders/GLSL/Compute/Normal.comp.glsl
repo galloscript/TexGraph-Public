@@ -10,7 +10,7 @@ precision highp float;
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 layout(binding = 0, rgba16f) uniform image2D uOutputBuffer0;
-layout(binding = 1, rgba16f) uniform image2D uInputBuffer0;
+layout(location = 80) uniform sampler2D uInputBuffer0;
 
 layout(location = 100) uniform ivec3 uOutputBufferSize;
 layout(location = 101) uniform ivec3 uInvocationOffset;
@@ -27,7 +27,7 @@ void main(void)
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     ivec2 lTexSize = ivec2(uOutputBufferSize.xy);
-    vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
+    vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord, 0);
 
     const vec2 size = vec2(2.0,0.0);
     const ivec2 lAdjacentCoord = ivec2(1, 1); //max(ivec2(1, 1), ivec2(uOutputBufferSize.x / 512.0f, uOutputBufferSize.y / 512.0f)); 
@@ -43,10 +43,10 @@ void main(void)
 
     double lHeightScale = uBumpHeightScale * uOutputBufferSize.x / 256.0f;
     double s11 = (1.0 - lInputColor0.r) * lHeightScale;
-    double s01 = (1.0 - imageLoad(uInputBuffer0, lCoordList[1]).r) * lHeightScale;
-    double s21 = (1.0 - imageLoad(uInputBuffer0, lCoordList[2]).r) * lHeightScale;
-    double s10 = (1.0 - imageLoad(uInputBuffer0, lCoordList[3]).r) * lHeightScale;
-    double s12 = (1.0 - imageLoad(uInputBuffer0, lCoordList[4]).r) * lHeightScale;
+    double s01 = (1.0 - texelFetch(uInputBuffer0, lCoordList[1], 0).r) * lHeightScale;
+    double s21 = (1.0 - texelFetch(uInputBuffer0, lCoordList[2], 0).r) * lHeightScale;
+    double s10 = (1.0 - texelFetch(uInputBuffer0, lCoordList[3], 0).r) * lHeightScale;
+    double s12 = (1.0 - texelFetch(uInputBuffer0, lCoordList[4], 0).r) * lHeightScale;
     
     //debug: precision clamping
     //s11 = int(s11 * 255) / 255.f;
@@ -69,7 +69,7 @@ void main(void)
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     ivec2 lTexSize = ivec2(uOutputBufferSize.xy);
-    vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
+    vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord);
 
 
     
@@ -100,16 +100,16 @@ void main(void)
 	// Use of the sobel filter requires the eight samples
 	// surrounding the current pixel:
     float lHeightScale = uBumpHeightScale * uOutputBufferSize.x / 256.0f;
-	float h00 = 1.0 - imageLoad(uInputBuffer0, o00 ).r * lHeightScale;
-	float h10 = 1.0 - imageLoad(uInputBuffer0, o10 ).r * lHeightScale;
-	float h20 = 1.0 - imageLoad(uInputBuffer0, o20 ).r * lHeightScale;
+	float h00 = 1.0 - texelFetch(uInputBuffer0, o00, 0 ).r * lHeightScale;
+	float h10 = 1.0 - texelFetch(uInputBuffer0, o10, 0 ).r * lHeightScale;
+	float h20 = 1.0 - texelFetch(uInputBuffer0, o20, 0 ).r * lHeightScale;
            
-	float h01 = 1.0 - imageLoad(uInputBuffer0, o01 ).r * lHeightScale;
-	float h21 = 1.0 - imageLoad(uInputBuffer0, o21 ).r * lHeightScale;
+	float h01 = 1.0 - texelFetch(uInputBuffer0, o01, 0 ).r * lHeightScale;
+	float h21 = 1.0 - texelFetch(uInputBuffer0, o21, 0 ).r * lHeightScale;
                 
-	float h02 = 1.0 - imageLoad(uInputBuffer0, o02 ).r * lHeightScale;
-	float h12 = 1.0 - imageLoad(uInputBuffer0, o12 ).r * lHeightScale;
-	float h22 = 1.0 - imageLoad(uInputBuffer0, o22 ).r * lHeightScale;
+	float h02 = 1.0 - texelFetch(uInputBuffer0, o02, 0 ).r * lHeightScale;
+	float h12 = 1.0 - texelFetch(uInputBuffer0, o12, 0 ).r * lHeightScale;
+	float h22 = 1.0 - texelFetch(uInputBuffer0, o22, 0 ).r * lHeightScale;
 			
 	// The Sobel X kernel is:
 	//

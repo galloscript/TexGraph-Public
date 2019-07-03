@@ -20,6 +20,7 @@ layout (std140, binding = 10) uniform SBRenderSettings
     vec4 uToneMapping;  //[x] = Saturation, [y] = Brightness, [z] = {unused}, [w] = {unused}
     vec4 uBloom;        //[x] = BloomSize, [y] = ColorRange, [z] = Threshold, [w] = {unused}
     vec4 uBackground;   //[x] = BgAlpha, [y] = BgGamma [z] = BgBlur, [w] = {unused}
+    ivec4 uFlags;       //[x] = BloomActive
 };
 
 vec3 makeBloom(float lod, vec2 offset, vec2 bCoord, vec2 aPixelSize)

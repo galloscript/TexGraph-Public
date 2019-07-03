@@ -1,0 +1,8 @@
+{
+    "name": "ApplyPostprocessKernel",
+    "compute_files": {
+        "glsl": [
+            "Shaders/GLSL/PBRViewer/ApplyPostprocess.comp.glsl"
+        ]
+    }
+}

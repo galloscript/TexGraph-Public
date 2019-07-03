@@ -22,9 +22,9 @@ struct TLight
 #define MAX_LIGHTS 3
 TLight sLights[MAX_LIGHTS] = TLight[MAX_LIGHTS]
 (
-    TLight(vec3(3.5, -6.0,  8.0), vec3(0.2, 0.2, 0.2) * 5.0),
-    TLight(vec3(-16.0, -6.0, 8.0), vec3(0.3, 0.0, 0.0)),
-    TLight(vec3(16.0,  16.0, 8.0), vec3(0.05, 0.3, 0.3))
+    TLight(vec3(3.5, -6.0,  8.0), vec3(0.2, 0.2, 0.2) * 800.0),
+    TLight(vec3(-16.0, -6.0, 8.0), vec3(0.3, 0.0, 0.0) * 550),
+    TLight(vec3(16.0,  16.0, 8.0), vec3(0.05, 0.3, 0.3) * 550)
 );
 
 const vec3 sLightPos = vec3(2.5, -9.0, 10.0);
@@ -43,6 +43,7 @@ layout(location = 12) uniform mat4 uBGRotMatrix;
 layout(location = 20) uniform samplerCube uEnvCubeMap;
 layout(location = 21) uniform sampler2D uIntegratedBRDF;
 layout(location = 22) uniform vec4 uViewport;
+layout(location = 23) uniform int uAlbedoComponents;
 
 layout(location = 120) uniform sampler2D uAlbedoMap;
 layout(location = 121) uniform sampler2D uRoughnessMap;
@@ -96,8 +97,8 @@ vec3 EnvBRDF( vec3 SpecularColor, float Roughness, float NoV )
 {
     Roughness = max(0.002, min(0.998, Roughness));
 	vec2 AB =  textureLod(uIntegratedBRDF, vec2(NoV, Roughness), 0).rg; //review this
-	vec3 GF = SpecularColor * AB.x + saturate( 50.0 * SpecularColor.g ) * AB.y;
-	//vec3 GF = SpecularColor * AB.x + AB.y;
+	//vec3 GF = SpecularColor * AB.x + saturate( 50.0 * SpecularColor.g ) * AB.y;
+	vec3 GF = SpecularColor * AB.x + AB.y;
 	return GF;
 }
 
@@ -174,11 +175,11 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 
     return finalTexCoords;  
 } 
-vec3 PBRColor()
+vec3 PBR_IBL()
 {
     vec3 lViewDir = normalize(ex_TangentViewPosition.xyz - ex_TangentFragPosition.xyz);
     vec2 lTexCoord = ParallaxMapping(ex_TexCoord.xy, lViewDir);
-    vec3 lAlbedo = texture(uAlbedoMap, lTexCoord.xy).rgb;
+    vec3 lAlbedo = (uAlbedoComponents == 1) ? texture(uAlbedoMap, lTexCoord.xy).rrr : texture(uAlbedoMap, lTexCoord.xy).rgb;
     vec3 lEmissive = texture(uEmissiveMap, lTexCoord.xy).rgb;
     float lAO = texture(uAmbientOcclusionMap, lTexCoord.xy).r;
     float lRoughness = texture(uRoughnessMap, lTexCoord.xy).r;
@@ -222,6 +223,66 @@ vec3 PBRColor()
     return (lFinalColor * lAO) + (lEmissive * uEmissiveIntensity);
 }
 
+float DistributionGGX(vec3 N, vec3 H, float roughness);
+float GeometrySchlickGGX(float NdotV, float roughness);
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
+vec3 fresnelSchlick(float cosTheta, vec3 F0);
+
+vec3 PBR_DirectLighting()
+{
+    vec3 lViewDir = normalize(ex_TangentViewPosition.xyz - ex_TangentFragPosition.xyz);
+    vec2 lTexCoord = ParallaxMapping(ex_TexCoord.xy, lViewDir);
+    vec3 lAlbedo = texture(uAlbedoMap, lTexCoord.xy).rgb;
+    vec3 lEmissive = texture(uEmissiveMap, lTexCoord.xy).rgb;
+    float lAO = texture(uAmbientOcclusionMap, lTexCoord.xy).r;
+    float lRoughness = texture(uRoughnessMap, lTexCoord.xy).r;
+    float lMetallic = texture(uMetalnessMap, lTexCoord.xy).r;
+    vec3 lNormal =  TangentToWorldNormal(InvertY(texture(uNormalMap, lTexCoord.xy).rgb));
+
+    vec3 N = normalize(lNormal);
+    vec3 V = lViewDir;
+
+    vec3 F0 = vec3(0.04); 
+    F0 = mix(F0, lAlbedo, lMetallic);
+	           
+    // reflectance equation
+    vec3 Lo = vec3(0.0);
+    for(int i = 0; i < MAX_LIGHTS; ++i) 
+    {
+        // calculate per-light radiance
+        vec3 L = normalize(sLights[i].mPosition - ex_EyeSpacePosition.xyz);
+        vec3 H = normalize(V + L);
+        float distance    = length(sLights[i].mPosition - ex_EyeSpacePosition.xyz);
+        float attenuation = 1.0 / (distance * distance);
+        vec3 radiance     = sLights[i].mColor * attenuation;        
+        
+        // cook-torrance brdf
+        float NDF = DistributionGGX(N, H, lRoughness);        
+        float G   = GeometrySmith(N, V, L, lRoughness);      
+        vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);       
+        
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - lMetallic;	  
+        
+        vec3 numerator    = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+        vec3 specular     = numerator / max(denominator, 0.001);  
+            
+        // add to outgoing radiance Lo
+        float NdotL = max(dot(N, L), 0.0);
+        Lo += (kD * lAlbedo / M_PI + specular) * radiance * NdotL;
+    }   
+  
+    vec3 ambient = vec3(0.01) * lAlbedo;
+    vec3 color = ambient + Lo;
+	
+    color = color / (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2));  
+   
+    return (color * lAO) + (lEmissive * uEmissiveIntensity);
+}
+
 void main(void)
 {
     out_Color = vec4(0, 0, 0, 1);
@@ -230,7 +291,8 @@ void main(void)
     //lTextureColor = lTextureColor * textureLod(uEnvCubeMap, -ex_Normal.xyz, lRoughness * 8.0).xyz;
     //lTextureColor = textureLod(uIntegratedBRDF, ex_TexCoord.xy, 0).xyz;
 
-    out_Color.rgb = PBRColor();
+    out_Color.rgb = PBR_IBL();
+    //out_Color.rgb = PBR_DirectLighting();
    /*
     for(int lLightIndex = 0; lLightIndex < MAX_LIGHTS; lLightIndex++)
     {

@@ -9,14 +9,14 @@
         {
             "name": "height",
             "display_name": "Height",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "output_pins": [
         {
             "name": "ao",
             "display_name": "AO",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "properties": [

@@ -10,7 +10,7 @@
         {
             "name": "Output",
             "display_name": "Output",
-            "type": "RGB"
+            "texture_type": "R16F"
         }
     ],
     "properties": [

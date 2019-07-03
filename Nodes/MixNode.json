@@ -1,38 +1,82 @@
 {
-    "name": "mix",
-    "display_name": "Mix",
-    "category": "Operations",
-    "kernel": "MixKernel",
-    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
-    "color": [ 100, 100, 0 ],
-    "input_pins": [
+    "node_list": [
         {
-            "name": "input",
-            "display_name": "Input",
-            "type": "R",
-            "uniform": "uInput"
-        }
-    ],
-    "output_pins": [
-        {
-            "name": "output",
-            "display_name": "Output",
-            "type": "RGB",
-            "uniform": "uOutput"
-        }
-    ],
-    "properties": [
-        {
-            "name": "begin",
-            "display_name": "Begin Color",
-            "type": "Color",
-            "default_value": [ 0, 0, 0 ]
+            "name": "mix_greyscale",
+            "display_name": "Mix GS",
+            "category": "Operations",
+            "kernel": "MixGreyscaleKernel",
+            "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+            "color": [ 100, 100, 0 ],
+            "input_pins": [
+                {
+                    "name": "input",
+                    "display_name": "Input",
+                    "texture_type": "R16F"
+                }
+            ],
+            "output_pins": [
+                {
+                    "name": "output",
+                    "display_name": "Output",
+                    "texture_type": "R16F"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "begin",
+                    "display_name": "Begin",
+                    "type": "float",
+                    "default_value": 0.0,
+                    "min_value": 0.0,
+                    "max_value": 1.0,
+                    "step_value": 0.005
+                },
+                {
+                    "name": "end",
+                    "display_name": "End",
+                    "type": "Float",
+                    "default_value": 1.0,
+                    "min_value": 0.0,
+                    "max_value": 1.0,
+                    "step_value": 0.005
+                }
+            ]
         },
         {
-            "name": "end",
-            "display_name": "End Color",
-            "type": "Color",
-            "default_value": [ 255, 255, 255 ]
+            "name": "mix",
+            "display_name": "Mix Color",
+            "category": "Operations",
+            "kernel": "MixKernel",
+            "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+            "color": [ 100, 100, 0 ],
+            "input_pins": [
+                {
+                    "name": "input",
+                    "display_name": "Input",
+                    "texture_type": "R16F"
+                }
+            ],
+            "output_pins": [
+                {
+                    "name": "output",
+                    "display_name": "Output",
+                    "texture_type": "RGBA16F"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "begin",
+                    "display_name": "Begin Color",
+                    "type": "Color",
+                    "default_value": [ 0, 0, 0 ]
+                },
+                {
+                    "name": "end",
+                    "display_name": "End Color",
+                    "type": "Color",
+                    "default_value": [ 255, 255, 255 ]
+                }
+            ]
         }
     ]
 }

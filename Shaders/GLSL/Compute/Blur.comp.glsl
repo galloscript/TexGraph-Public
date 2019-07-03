@@ -10,10 +10,17 @@ precision highp float;
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 layout(location = 100) uniform ivec3 uOutputBufferSize;
-layout(location = 101) uniform ivec3 uInvocationOffset;
+layout(location = 101) uniform ivec3 uInvocationOffset; 
+layout(location = 102) uniform ivec4 uInputFormat;
+layout(location = 103) uniform ivec4 uOutputFormat;
 
-layout(binding = 0, rgba16f) uniform image2D uOutputBuffer0;
-layout(binding = 1, rgba16f) uniform image2D uInputBuffer0;
+
+layout(binding = 0) uniform writeonly image2D uOutputBuffer0;
+layout(location = 80) uniform sampler2D uInputBuffer0;
+layout(location = 81) uniform sampler2D uInputBuffer1;
+layout(location = 82) uniform sampler2D uInputBuffer2;
+layout(location = 83) uniform sampler2D uInputBuffer3;
+
 
 //layout(location = 0) uniform int    uKernelSize;
 //layout(location = 1) uniform float  uSigma;
@@ -55,6 +62,8 @@ const float sKernelTableD[9][9] =  float[][](float[](0.010989,	0.011474,	0.01183
                                             float[](0.010989,	0.011474,	0.011833,	0.012054,	0.012129,	0.012054,	0.011833,	0.011474,	0.010989));
 
 vec4    SampleWarped(layout(rgba16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
+vec4    SampleWarped(layout(r16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
+vec4    SampleWarped(sampler2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
 
 vec4 Blur(ivec2 aBufferCoord)
 {
@@ -86,7 +95,7 @@ vec4 Blur(ivec2 aBufferCoord)
             lInputCoord.x = lInputCoord.x % int(uOutputBufferSize.x);
             lInputCoord.y = lInputCoord.y % int(uOutputBufferSize.y);
 
-            vec4 lInputColor = imageLoad(uInputBuffer0, lInputCoord);
+            vec4 lInputColor = texelFetch(uInputBuffer0, lInputCoord, 0);
             lColorSum += lInputColor * sKernelTable[itx + lHalfSize][ity + lHalfSize];
         } 
     }
@@ -117,7 +126,7 @@ void main(void)
 {
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
-    //vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
+    //vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord, 0);
     //vec4 lOutputColor = blur13(lBufferCoord, uOutputBufferSize.xy, vec2(1.0 - uArea, uArea) * 1.1);
     vec4 lOutputColor = vec4(Blur(lBufferCoord).xyz, 1.0);
     //const vec4 lOutputColor = vec4(vec3(lColorSum.x, lColorSum.y, lColorSum.z), lInputColor0.a);

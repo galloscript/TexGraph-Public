@@ -20,6 +20,7 @@ layout (std140, binding = 10) uniform SBRenderSettings
     vec4 uToneMapping;  //[x] = Saturation, [y] = Brightness, [z] = {unused}, [w] = {unused}
     vec4 uBloom;        //[x] = BloomSize, [y] = ColorRange, [z] = Threshold, [w] = {unused}
     vec4 uBackground;   //[x] = BgAlpha, [y] = BgGamma [z] = BgBlur, [w] = {unused}
+    ivec4 uFlags;       //[x] = BloomActive
 };
 
 uniform float uColorRange = 20.0;
@@ -45,13 +46,13 @@ vec3 jodieReinhardTonemap(vec3 c)
 
 vec3 bloomTile(float lod, vec2 offset, vec2 uv)
 {
-    return texture(uBloomPyramid, uv * exp2(-lod) + offset).rgb;
+    return textureLod(uBloomPyramid, uv * exp2(-lod) + offset, 0).rgb;
 }
 
 vec3 getBloom(vec2 uv)
 {
     vec3 blur = vec3(0.0);
-    vec2 lOffsetFix = vec2(0.00025);
+    vec2 lOffsetFix = vec2(0.00025, 0.0005);
     blur = pow(bloomTile(2., vec2(0.0, 0.0) + lOffsetFix, uv),vec3(2.2))       	   	+ blur;
     blur = pow(bloomTile(3., vec2(0.3, 0.0) + lOffsetFix, uv),vec3(2.2)) * 1.3        + blur;
     blur = pow(bloomTile(4., vec2(0.0, 0.3) + lOffsetFix, uv),vec3(2.2)) * 1.6        + blur;
@@ -82,7 +83,10 @@ void main(void)
     vec4 lInputColor = texture(uInputColor, lUV).rgba;
     vec3 color = pow(lInputColor.rgb * uToneMapping.y, vec3(uToneMapping.x));
          color = pow(color, vec3(2.2));
-         color += pow(getBloom(lUV), vec3(2.2));
+         if(uFlags.x == 1)
+         {
+            color += pow(getBloom(lUV) * uToneMapping.y, vec3(2.2));
+         }
          color = pow(color, vec3(1.0 / 2.2));
          color = jodieReinhardTonemap(color);
          //color = toneMapping(color, 1.1, 0.66);

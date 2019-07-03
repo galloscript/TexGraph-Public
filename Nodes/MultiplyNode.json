@@ -9,19 +9,19 @@
         {
             "name": "inputA",
             "display_name": "InputA",
-            "type": "RGB"
+            "texture_type": "ANY"
         },
         {
             "name": "inputB",
             "display_name": "InputB",
-            "type": "RGB"
+            "texture_type": "ANY"
         }
     ],
     "output_pins": [
         {
             "name": "output",
             "display_name": "Output",
-            "type": "RGB"
+            "texture_type": "INPUT0"
         }
     ],
     "properties": [

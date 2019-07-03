@@ -1,7 +1,7 @@
 {
     "name": "normal",
     "display_name": "Normal",
-    "category": "Operations",
+    "category": "Filters",
     "kernel": "NormalKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 255, 128, 255 ],
@@ -9,14 +9,14 @@
         {
             "name": "Input",
             "display_name": "Input",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "output_pins": [
         {
             "name": "Output",
             "display_name": "Output",
-            "type": "RGB"
+            "texture_type": "RGBA16F"
         }
     ],
     "properties": [

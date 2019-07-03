@@ -5,14 +5,14 @@
     "kernel": "Perlin1Kernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 0, 100, 0 ],
+    "realtime_update": false,
     "input_pins": [
     ],
     "output_pins": [
         {
             "name": "output",
             "display_name": "Output",
-            "type": "R",
-            "uniform": "uOutput"
+            "texture_type": "R16F"
         }
     ],
     "properties": [

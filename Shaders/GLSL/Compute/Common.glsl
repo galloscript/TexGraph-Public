@@ -71,3 +71,13 @@ vec4 SampleWarped(layout(rgba16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTe
 {
     return imageLoad(aSrcImage,  WrapTo(aBaseCoord, aTexSize));
 }
+
+vec4 SampleWarped(layout(r16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize)
+{
+    return imageLoad(aSrcImage,  WrapTo(aBaseCoord, aTexSize));
+}
+
+vec4 SampleWarped(sampler2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize)
+{
+    return texelFetch(aSrcImage,  WrapTo(aBaseCoord, aTexSize), 0);
+}

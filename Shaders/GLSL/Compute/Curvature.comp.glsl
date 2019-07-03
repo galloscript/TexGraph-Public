@@ -9,8 +9,8 @@ precision highp float;
 
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
-layout(binding = 0, rgba16f) uniform image2D uOutputBuffer0;
-layout(binding = 1, rgba16f) uniform image2D uInputBuffer0;
+layout(binding = 0) uniform writeonly image2D uOutputBuffer0;
+layout(location = 80) uniform sampler2D uInputBuffer0;
 
 layout(location = 100) uniform ivec3 uOutputBufferSize;
 layout(location = 101) uniform ivec3 uInvocationOffset;
@@ -22,6 +22,8 @@ ivec2   WrapCoord(ivec2 aCoord, ivec2 aSize);
 int     WrapTo(int X, int W);
 ivec2   WrapTo(ivec2 X, ivec2 W);
 vec4    SampleWarped(layout(rgba16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
+vec4    SampleWarped(layout(r16f) image2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
+vec4    SampleWarped(sampler2D aSrcImage, ivec2 aBaseCoord, ivec2 aTexSize);
 
 float GenerateCurviness(ivec2 aCoord, ivec2 aTexSize, int aRadius)
 {
@@ -31,7 +33,7 @@ float GenerateCurviness(ivec2 aCoord, ivec2 aTexSize, int aRadius)
     float lValueMultiplier = aTexSize.x / 256.0;
     for(int d = 1; d < (aRadius + 1); d++)
     {
-        float h   = imageLoad(uInputBuffer0, aCoord).r * lValueMultiplier;
+        float h   = texelFetch(uInputBuffer0, aCoord, 0).r * lValueMultiplier;
         float hv1 = SampleWarped(uInputBuffer0, aCoord - ivec2(0., d), aTexSize).r * lValueMultiplier;
         float hv2 = SampleWarped(uInputBuffer0, aCoord + ivec2(0., d), aTexSize).r * lValueMultiplier;
         float hh1 = SampleWarped(uInputBuffer0, aCoord - ivec2(d, 0.), aTexSize).r * lValueMultiplier;
@@ -77,7 +79,7 @@ void main(void)
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     ivec2 lTexSize = ivec2(uOutputBufferSize.xy);
-    vec4 lInputColor0 = imageLoad(uInputBuffer0, lBufferCoord);
+    vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord, 0);
 
 
     
@@ -108,16 +110,16 @@ void main(void)
 	// Use of the sobel filter requires the eight samples
 	// surrounding the current pixel:
     float lHeightScale = uBumpHeightScale * uOutputBufferSize.x / 256.0f;
-	float h00 = 1.0 - imageLoad(uInputBuffer0, o00 ).r * lHeightScale;
-	float h10 = 1.0 - imageLoad(uInputBuffer0, o10 ).r * lHeightScale;
-	float h20 = 1.0 - imageLoad(uInputBuffer0, o20 ).r * lHeightScale;
+	float h00 = 1.0 - texelFetch(uInputBuffer0, o00, 0 ).r * lHeightScale;
+	float h10 = 1.0 - texelFetch(uInputBuffer0, o10, 0 ).r * lHeightScale;
+	float h20 = 1.0 - texelFetch(uInputBuffer0, o20, 0 ).r * lHeightScale;
            
-	float h01 = 1.0 - imageLoad(uInputBuffer0, o01 ).r * lHeightScale;
-	float h21 = 1.0 - imageLoad(uInputBuffer0, o21 ).r * lHeightScale;
-                
-	float h02 = 1.0 - imageLoad(uInputBuffer0, o02 ).r * lHeightScale;
-	float h12 = 1.0 - imageLoad(uInputBuffer0, o12 ).r * lHeightScale;
-	float h22 = 1.0 - imageLoad(uInputBuffer0, o22 ).r * lHeightScale;
+	float h01 = 1.0 - texelFetch(uInputBuffer0, o01, 0 ).r * lHeightScale;
+	float h21 = 1.0 - texelFetch(uInputBuffer0, o21, 0 ).r * lHeightScale;
+                                                  
+	float h02 = 1.0 - texelFetch(uInputBuffer0, o02, 0 ).r * lHeightScale;
+	float h12 = 1.0 - texelFetch(uInputBuffer0, o12, 0 ).r * lHeightScale;
+	float h22 = 1.0 - texelFetch(uInputBuffer0, o22, 0 ).r * lHeightScale;
 			
 	// The Sobel X kernel is:
 	//

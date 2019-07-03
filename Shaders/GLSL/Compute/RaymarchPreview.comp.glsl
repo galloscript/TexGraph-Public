@@ -210,9 +210,9 @@ void main(void)
 {
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
-    //vec4 lInputColor0 = imageLoad(uInputBuffer0,    ivec2(lUV * vec2(imageSize(uInputBuffer0))));
-    //vec4 lInputColor1 = imageLoad(uInputBuffer1,    ivec2(lUV * vec2(imageSize(uInputBuffer1))));
-    //vec4 lInputColor2 = imageLoad(uMaskBuffer,      ivec2(lUV * vec2(imageSize(uInputBuffer2))));
+    //vec4 lInputColor0 = texelFetch(uInputBuffer0,    ivec2(lUV * vec2(imageSize(uInputBuffer0))), 0);
+    //vec4 lInputColor1 = texelFetch(uInputBuffer1,    ivec2(lUV * vec2(imageSize(uInputBuffer1))), 0);
+    //vec4 lInputColor2 = texelFetch(uMaskBuffer,      ivec2(lUV * vec2(imageSize(uInputBuffer2))), 0);
 
     vec4 lOutputColor;
     mainImage(lOutputColor, vec2(lBufferCoord));

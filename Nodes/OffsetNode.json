@@ -9,25 +9,30 @@
         {
             "name": "input",
             "display_name": "Input",
-            "type": "RGB"
+            "texture_type": "ANY"
         },
         {
-            "name": "offset",
-            "display_name": "Offset",
-            "type": "R"
+            "name": "offsetx_img",
+            "display_name": "Offset X",
+            "texture_type": "R16F"
+        },
+        {
+            "name": "offsety_img",
+            "display_name": "Offset Y",
+            "texture_type": "R16F"
         }
     ],
     "output_pins": [
         {
             "name": "output",
             "display_name": "Output",
-            "type": "RGB"
+            "texture_type": "INPUT0"
         }
     ],
     "properties": [
         {
             "name": "offsetX",
-            "display_name": "OffsetX",
+            "display_name": "Offset X",
             "type": "float",
             "default_value": 0.0,
             "min_value": -1,
@@ -35,7 +40,7 @@
         },
         {
             "name": "offsetY",
-            "display_name": "OffsetY",
+            "display_name": "Offset Y",
             "type": "float",
             "default_value": 0.0,
             "min_value": -1,

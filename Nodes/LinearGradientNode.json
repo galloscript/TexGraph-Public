@@ -1,32 +1,32 @@
 {
-    "name": "grey_gradient_mix",
-    "display_name": "Grey Gradient Mix",
+    "name": "linear_gradient",
+    "display_name": "Linear Gradient",
     "category": "~Experiments",
-    "kernel": "GreyGradientMixKernel",
+    "kernel": "LinearGradientKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 200, 0, 0 ],
     "input_pins": [
         {
             "name": "end_value",
             "display_name": "End Value",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "start_value",
             "display_name": "Start Value",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "angle",
             "display_name": "Angle",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "output_pins": [
         {
             "name": "output",
             "display_name": "Output",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "properties": [

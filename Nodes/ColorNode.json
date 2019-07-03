@@ -9,24 +9,24 @@
         {
             "name": "red",
             "display_name": "Red",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "green",
             "display_name": "Green",
-            "type": "R"
+            "texture_type": "R16F"
         },
         {
             "name": "blue",
             "display_name": "Blue",
-            "type": "R"
+            "texture_type": "R16F"
         }
     ],
     "output_pins": [
         {
             "name": "Output",
             "display_name": "Output",
-            "type": "RGB"
+            "texture_type": "RGBA16F"
         }
     ],
     "properties": [

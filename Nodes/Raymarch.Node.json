@@ -12,7 +12,7 @@
         {
             "name": "output",
             "display_name": "Output",
-            "type": "RGB"
+            "texture_type": "RGBA16F"
         }
     ],
     "properties": [
