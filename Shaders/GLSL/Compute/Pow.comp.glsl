@@ -23,6 +23,6 @@ void main(void)
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord, 0);
 
-    const vec4 lOutputColor = vec4(vec3(pow(lInputColor0.xyz, vec3(uPower))), lInputColor0.a);
+    const vec4 lOutputColor = vec4(vec3(pow(lInputColor0.xyz, vec3(uPower))), 1.0);
     imageStore (uOutputBuffer0, lBufferCoord, clamp(lOutputColor, 0.0, 1.0));
 }

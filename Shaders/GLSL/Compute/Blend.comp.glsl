@@ -24,7 +24,7 @@ void main(void)
     ivec2 lBufferCoord = ivec2(gl_GlobalInvocationID.xy + uInvocationOffset.xy);
     //vec2 lUV = (vec2(lBufferCoord.xy) / vec2(uOutputBufferSize.xy));
     vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord, 0);
-    vec4 lInputColor1 = texelFetch(uInputBuffer1, lBufferCoord, 0).rrrr;
+    vec4 lInputColor1 = texelFetch(uInputBuffer1, lBufferCoord, 0);
     float lInputColor2 = texelFetch(uInputBuffer2, lBufferCoord, 0).r;
 
     lInputColor0.rgb = (uInputFormat.x == 1) ? lInputColor0.rrr : lInputColor0.rgb; 

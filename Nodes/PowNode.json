@@ -9,14 +9,14 @@
         {
             "name": "input",
             "display_name": "Input",
-            "texture_type": "R16F"
+            "texture_type": "ANY"
         }
     ],
     "output_pins": [
         {
             "name": "output",
             "display_name": "Output",
-            "texture_type": "R16F"
+            "texture_type": "INPUT0"
         }
     ],
     "properties": [
