@@ -1,7 +1,7 @@
 {
     "name": "Tiling",
     "display_name": "Tiling",
-    "category": "Operations",
+    "category": "Transform",
     "kernel": "TilingKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 0, 100, 50 ],

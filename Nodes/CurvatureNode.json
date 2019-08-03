@@ -1,7 +1,7 @@
 {
     "name": "curvature",
     "display_name": "Curvature",
-    "category": "Operations",
+    "category": "Filters",
     "kernel": "CurvatureKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 255, 128, 255 ],

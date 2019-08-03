@@ -1,7 +1,7 @@
 {
     "name": "EdgeDetection",
     "display_name": "Edge Detection",
-    "category": "Operations",
+    "category": "Filters",
     "kernel": "EdgeDetectionKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 0, 100, 50 ],

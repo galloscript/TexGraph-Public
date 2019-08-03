@@ -1,0 +1,35 @@
+{
+    "name": "transform2d",
+    "display_name": "Transform 2D",
+    "category": "Transform",
+    "kernel": "Transform2DKernel",
+    "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator", "NodeCompTransform2DViewport" ],
+    "color": [ 0, 100, 50 ],
+    "input_pins": [
+        {
+            "name": "Input",
+            "display_name": "Input",
+            "texture_type": "ANY"
+        }
+    ],
+    "output_pins": [
+        {
+            "name": "Output",
+            "display_name": "Output",
+            "texture_type": "INPUT0"
+        }
+    ],
+    "properties": [
+        {
+            "name": "transform",
+            "display_name": "Transform",
+            "type": "Transform2D"
+        },
+        {
+            "name": "tiling",
+            "display_name": "Tiling",
+            "type": "Bool",
+            "default_value": false
+        }
+    ]
+}

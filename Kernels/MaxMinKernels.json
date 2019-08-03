@@ -1,0 +1,26 @@
+{
+    "kernel_list": [
+        {
+            "name": "MaxKernel",
+            "compute_files": {
+                "glsl": [
+                    "Shaders/GLSL/Compute/Common.glsl",
+                    "Shaders/GLSL/Compute/MaxMin.comp.glsl"
+                ]
+            }
+        },
+
+        {
+            "name": "MinKernel",
+            "extra_defines": {
+                "KRN_MIN": 1
+            },
+            "compute_files": {
+                "glsl": [
+                    "Shaders/GLSL/Compute/Common.glsl",
+                    "Shaders/GLSL/Compute/MaxMin.comp.glsl"
+                ]
+            }
+        }
+    ]
+}

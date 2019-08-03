@@ -1,7 +1,7 @@
 {
     "name": "Offset",
     "display_name": "Offset",
-    "category": "Operations",
+    "category": "Transform",
     "kernel": "OffsetKernel",
     "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
     "color": [ 250, 100, 0 ],

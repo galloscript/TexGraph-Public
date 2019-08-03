@@ -27,7 +27,11 @@ void main(void)
     vec4 lInputColor0 = texelFetch(uInputBuffer0, lBufferCoord, 0);
     vec4 lInputColor1 = texelFetch(uInputBuffer1, lBufferCoord, 0);
 
+#ifdef KRN_MIN
+    const vec4 lOutputColor = vec4(min(lInputColor0.xyz, lInputColor1.xyz), 1.0);
+#else
     const vec4 lOutputColor = vec4(max(lInputColor0.xyz, lInputColor1.xyz), 1.0);
+#endif
     imageStore (uOutputBuffer0, lBufferCoord, lOutputColor);
 }
  

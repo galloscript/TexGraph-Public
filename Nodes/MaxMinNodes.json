@@ -1,0 +1,62 @@
+{
+    "node_list": [
+        {
+            "name": "Max",
+            "display_name": "Max",
+            "category": "Operations",
+            "kernel": "MaxKernel",
+            "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+            "color": [ 0, 100, 50 ],
+            "input_pins": [
+                {
+                    "name": "InputA",
+                    "display_name": "InputA",
+                    "texture_type": "R16F"
+                },
+                {
+                    "name": "InputB",
+                    "display_name": "InputB",
+                    "texture_type": "R16F"
+                }
+            ],
+            "output_pins": [
+                {
+                    "name": "Output",
+                    "display_name": "Output",
+                    "texture_type": "R16F"
+                }
+            ],
+            "properties": [
+            ]
+        },
+        {
+            "name": "Min",
+            "display_name": "Min",
+            "category": "Operations",
+            "kernel": "MinKernel",
+            "components": [ "NodeCompView", "NodeCompController", "NodeCompGenerator" ],
+            "color": [ 0, 100, 50 ],
+            "input_pins": [
+                {
+                    "name": "InputA",
+                    "display_name": "InputA",
+                    "texture_type": "R16F"
+                },
+                {
+                    "name": "InputB",
+                    "display_name": "InputB",
+                    "texture_type": "R16F"
+                }
+            ],
+            "output_pins": [
+                {
+                    "name": "Output",
+                    "display_name": "Output",
+                    "texture_type": "R16F"
+                }
+            ],
+            "properties": [
+            ]
+        }
+    ]
+}
