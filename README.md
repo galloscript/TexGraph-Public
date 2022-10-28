@@ -3,5 +3,5 @@ TexGraph Public folder content with nodes json descriptors and shaders. You can 
 
 Report here any issue or feedback realted to TexGraph tool.
 
-
+https://galloscript.itch.io/texgraph
 
